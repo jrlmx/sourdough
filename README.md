@@ -1,11 +1,12 @@
-# A Starter Script for Laravel Livewire w/ Folio, Volt, and Flux UI
+# A installer for Laravel Livewire w/ Folio, Volt, and Flux UI
+
+Yes... it's written in Go.
 
 ## Overview
 
-This standalone executable will install Livewire, Folio, Volt, and Flux UI into a fresh Laravel project.
-You just provide your credentials and it will do the rest.
+This standalone executable will install Livewire, Folio, Volt, and Flux UI - Pro into a fresh Laravel project - you provide your Flux UI credentials and it will do the rest.
 
-This is my personal starter script for Laravel Livewire projects - use it at your own risk.
+This is my personal starter for Laravel Livewire projects - use it at your own risk.
 
 ## Installation
 
