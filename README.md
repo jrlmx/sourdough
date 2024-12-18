@@ -8,6 +8,9 @@ This standalone executable will install Livewire, Folio, Volt, Flux UI - Pro and
 
 This is my personal starting setup for new TALL stack projects - use it at your own risk.
 
+## Customizing...
+
+
 ## Installation
 
 ### Using: "make build" command
@@ -33,3 +36,4 @@ This is my personal starting setup for new TALL stack projects - use it at your 
 ## Todo
 
 - [ ] Create a fresh Laravel project before installing packages
+- [ ] Add a file to make adding or removing packages from the install list easy
