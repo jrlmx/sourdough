@@ -8,8 +8,9 @@ This standalone executable will install Livewire, Folio, Volt, Flux UI - Pro and
 
 This is my personal starting setup for new TALL stack projects - use it at your own risk.
 
-## Customizing...
+## Customizing
 
+One advantage to this approach is that any file you add to the ./stubs directory will be copied into the project root in the same directory structure as the stubs.
 
 ## Installation
 
