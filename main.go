@@ -55,7 +55,8 @@ func getActions() []func(cfg *config) error {
 		fluxPrompt,
 		createAuthJSON,
 		updateGitignore,
-		installComposerDependencies,
+		installComposerDeps,
+		installNodeDeps,
 		copyStubFiles,
 	}
 }

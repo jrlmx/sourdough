@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+/* Alpine JS */
+[x-cloak] {
+    display: none !important;
+}
+
+/* Flux UI */
+[data-flux-button] {
+    @apply cursor-pointer;
+}

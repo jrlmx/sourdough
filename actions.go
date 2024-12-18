@@ -93,7 +93,7 @@ func updateGitignore(cfg *config) error {
 	return nil
 }
 
-func installComposerDependencies(cfg *config) error {
+func installComposerDeps(cfg *config) error {
 	if err := exec.Command("which", "composer").Run(); err != nil {
 		return fmt.Errorf("composer is not installed")
 	}
@@ -114,7 +114,7 @@ func installComposerDependencies(cfg *config) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("failed to install Composer dependencies: %w", err)
+		return fmt.Errorf("failed to install composer dependencies: %w", err)
 	}
 
 	artisanCmds := []string{
@@ -129,6 +129,28 @@ func installComposerDependencies(cfg *config) error {
 		if err := cmd.Run(); err != nil {
 			log.Printf("Failed to run %s: %v", artisanCmd, err)
 		}
+	}
+
+	return nil
+}
+
+func installNodeDeps(cfg *config) error {
+	if err := exec.Command("which", "npm").Run(); err != nil {
+		return fmt.Errorf("npm is not installed")
+	}
+
+	deps := []string{
+		"prettier",
+		"prettier-plugin-blade",
+		"@tailwindcss/typography",
+		"@tailwindcss/forms",
+	}
+
+	cmd := exec.Command("npm", append([]string{"install", "-D"}, deps...)...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("failed to install node dependencies: %w", err)
 	}
 
 	return nil
