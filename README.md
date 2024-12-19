@@ -22,7 +22,7 @@ See: The [Laravel Docs](https://laravel.com/docs/11.x/installation) for instalat
 
 ## Customizing
 
-A key feature of this tool is its use of a `./stubs` directory. Any files placed in this folder will be copied into the new Laravel project, preserving their directory structure. However, **it will MERCILESSLY overwrite existing files** without asking—so handle with care.
+A key feature of this tool is its use of an embedded `./stubs` directory. Any files placed in this folder (pre-build) will be copied into the new Laravel project, preserving their directory structure. However, **it will MERCILESSLY overwrite existing files** without asking—so handle with care.
 
 ## Installation
 
