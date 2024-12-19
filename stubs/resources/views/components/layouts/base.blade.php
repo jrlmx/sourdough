@@ -31,12 +31,12 @@
 <body {{ $attributes->merge(['class' => 'min-h-screen bg-white text-black dark:bg-zinc-800 dark:text-white']) }}>
     {{ $slot }}
 
-    @fluxScripts
-    @stack('body.scripts')
-
     @persist('toast')
         <flux:toast />
     @endpersist
+
+    @fluxScripts
+    @stack('body.scripts')
 </body>
 
 </html>
