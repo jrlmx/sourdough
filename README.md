@@ -1,16 +1,26 @@
-# An Opinionated Starter Kit? for Laravel/Livewire with Folio, Volt, and Flux UI
+# An Opinionated Starter Kit for Laravel/Livewire with Folio, Volt, and Flux UI
 
-Yes, it’s written in Go... well, the "installer" is...
+Yes, it’s written in Go. No I won't compile it for you...
 
 ## Overview
 
-This standalone executable streamlines the setup of Livewire, Folio, Volt, and Flux UI Pro—along with a few extras—into a fresh Laravel project. Simply provide your Flux UI credentials, and the tool takes care of the rest.
+This standalone executable simplifies the setup of Livewire, Folio, Volt, and Flux UI Pro—along with a few extras—by creating a fresh Laravel project and configuring it with the necessary dependencies. Just provide your Flux UI credentials, and the tool takes care of the rest.
 
-This is my go-to setup for new TALL stack projects, and while it’s tailored to my preferences, you’re welcome to try it out. Just remember: **use at your own risk.**
+This is my go-to setup for new TALL stack projects. While it’s tailored to my preferences, you’re welcome to give it a try. Just remember: **use at your own risk.**
+
+## Prerequisites
+
+Before using this tool, make sure you have the following installed on your system:
+
+- **PHP**
+- **Composer**
+- **Laravel Installer**
+
+See: The [Laravel Docs](https://laravel.com/docs/11.x/installation) for instalation instructions.
 
 ## Customizing
 
-A key advantage of this tool is its use of a `./stubs` directory. Any files placed in this folder will be copied to the project root, maintaining their directory structure. However, **it will MERCILESSLY overwrite existing files** without asking—so handle with care.
+A key feature of this tool is its use of a `./stubs` directory. Any files placed in this folder will be copied into the new Laravel project, preserving their directory structure. However, **it will MERCILESSLY overwrite existing files** without asking—so handle with care.
 
 ## Installation
 
@@ -26,15 +36,21 @@ A key advantage of this tool is its use of a `./stubs` directory. Any files plac
 2. Run `go build -o sourdough`.
 3. Move the `sourdough` binary to a directory in your `$PATH` (e.g., `~/.local/bin`).
 
+#### Don't have Go installed?
+
+Check out another of my favorite tools - webinstall.dev || [Webi](https://webinstall.dev/) and follow this guide: [Install Go](https://webinstall.dev/golang/)
+Or go checkout the Golang Docs...
+
 ## Usage
 
-1. Create a fresh Laravel project.
-2. Navigate to the project root.
-3. Run the `sourdough` command.
-4. Follow the prompts.
-5. Enjoy your new setup!
+1. Run the `sourdough` command.
+2. Follow the prompts to:
+   - Create a fresh Laravel project.
+   - Install Livewire, Folio, Volt, Flux UI Pro, and other goodies.
+   - Scaffold a typical auth-flow, profile, and layout(s)
+3. Enjoy your new setup!
 
 ## To-Do
 
-- [ ] Automate the creation of a fresh Laravel project before installation.
-- [ ] Add a configuration file to simplify adding or removing packages from the install list.
+- [ ] Add more customization options for package installation.
+- [ ] Include better error handling for unsupported systems.

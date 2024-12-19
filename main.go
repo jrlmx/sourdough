@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 //go:embed stubs/*
@@ -20,28 +21,36 @@ type HTTPBasicCredentials struct {
 }
 
 type config struct {
-	dir  string
-	flux *struct {
+	projectName string
+	projectDir  string
+	flux        *struct {
 		username string
 		password string
 	}
 }
 
 func main() {
-	dir, err := os.Getwd()
-
-	if err != nil {
-		log.Fatalf("Failed to get working director: %v", err)
+	if len(os.Args) != 2 {
+		log.Fatal("Usage: program <project-name>")
 	}
 
+	projectName := os.Args[1]
+	workingDir, err := os.Getwd()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	projectDir := filepath.Join(workingDir, projectName)
+
 	cfg := config{
-		dir: dir,
+		projectName: projectName,
+		projectDir:  projectDir,
 	}
 
 	for _, action := range getActions() {
-		err = action(&cfg)
-
-		if err != nil {
+		if err := action(&cfg); err != nil {
+			cleanupOnFailure(&cfg)
 			log.Fatal(err)
 		}
 	}
@@ -51,7 +60,7 @@ func main() {
 
 func getActions() []func(cfg *config) error {
 	return []func(cfg *config) error{
-		isLaravelProject,
+		createLaravelProject,
 		fluxPrompt,
 		createAuthJSON,
 		updateGitignore,
@@ -59,4 +68,13 @@ func getActions() []func(cfg *config) error {
 		installNodeDeps,
 		copyStubFiles,
 	}
+}
+
+func cleanupOnFailure(cfg *config) error {
+	if _, err := os.Stat(cfg.projectName); err == nil {
+		if err := os.RemoveAll(cfg.projectName); err != nil {
+			return fmt.Errorf("failed to cleanup directory: %w", err)
+		}
+	}
+	return nil
 }

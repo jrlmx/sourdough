@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/fs"
 	"log"
@@ -13,9 +12,26 @@ import (
 	"strings"
 )
 
-func isLaravelProject(cfg *config) error {
-	if _, err := os.Stat(filepath.Join(cfg.dir, "composer.json")); errors.Is(err, os.ErrNotExist) {
-		return errors.New("current directory is not a laravel project (no composer.json found)")
+func createLaravelProject(cfg *config) error {
+	if err := exec.Command("which", "laravel").Run(); err != nil {
+		return fmt.Errorf(("laravel installer is not installed"))
+	}
+
+	if _, err := os.Stat(cfg.projectName); err == nil {
+		return fmt.Errorf("directory already exists: %s", cfg.projectDir)
+	}
+
+	fmt.Printf("Creating new Laravel project: %s\n", cfg.projectName)
+
+	cmd := exec.Command("laravel", "new", cfg.projectName)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("failed to create Laravel project: %w", err)
+	}
+
+	if err := os.Chdir(cfg.projectDir); err != nil {
+		return fmt.Errorf("failed to change to project directory: %w", err)
 	}
 
 	return nil
@@ -51,7 +67,7 @@ func createAuthJSON(cfg *config) error {
 		},
 	}
 
-	path := filepath.Join(cfg.dir, "auth.json")
+	path := filepath.Join(cfg.projectDir, "auth.json")
 
 	file, err := json.MarshalIndent(authConfig, "", "    ")
 	if err != nil {
@@ -66,7 +82,7 @@ func createAuthJSON(cfg *config) error {
 }
 
 func updateGitignore(cfg *config) error {
-	path := filepath.Join(cfg.dir, ".gitignore")
+	path := filepath.Join(cfg.projectDir, ".gitignore")
 
 	content, err := os.ReadFile(path)
 	if err != nil {
@@ -157,7 +173,7 @@ func installNodeDeps(cfg *config) error {
 }
 
 func copyStubFiles(cfg *config) error {
-	err := os.MkdirAll(cfg.dir, os.ModePerm)
+	err := os.MkdirAll(cfg.projectDir, os.ModePerm)
 
 	if err != nil {
 		return fmt.Errorf("failed to create desination directory: %w", err)
@@ -181,7 +197,7 @@ func copyStubFiles(cfg *config) error {
 		if err != nil {
 			return fmt.Errorf("failed to determine relative path: %w", err)
 		}
-		destPath := filepath.Join(cfg.dir, relPath)
+		destPath := filepath.Join(cfg.projectDir, relPath)
 
 		err = os.MkdirAll(filepath.Dir(destPath), os.ModePerm)
 		if err != nil {
