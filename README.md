@@ -57,3 +57,4 @@ A key feature of this tool is its use of an embedded `./stubs` directory. Any fi
 - [ ] Add more prompts & options for package installation.
 - [ ] Implement a package list with composer and npm packages to be installed.
 - [ ] Include better error handling for unsupported systems.
+- [ ] Add fallback to composer create-project when creating the project.

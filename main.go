@@ -60,13 +60,13 @@ func main() {
 
 func getActions() []func(cfg *config) error {
 	return []func(cfg *config) error{
-		createLaravelProject,
-		fluxPrompt,
-		createAuthJSON,
-		updateGitignore,
-		installComposerDeps,
-		installNodeDeps,
-		copyStubFiles,
+		handleCreateApp,
+		handleFluxPrompt,
+		handleAuthJSON,
+		handleGitignore,
+		handleComposerDeps,
+		handleNodeDeps,
+		handlePublishFiles,
 	}
 }
 
