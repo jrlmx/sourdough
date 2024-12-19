@@ -6,7 +6,7 @@ Yes, it’s written in Go. No I won't compile it for you...
 
 This standalone executable simplifies the setup of Livewire, Folio, Volt, and Flux UI Pro—along with a few extras—by creating a fresh Laravel project and configuring it with the necessary dependencies. Just provide your Flux UI credentials, and the tool takes care of the rest.
 
-This is my go-to setup for new TALL stack projects. While it’s tailored to my preferences, you’re welcome to give it a try. Just remember: **use at your own risk.**
+This is my go-to setup for new TALL stack projects. While it’s tailored to my preferences, you’re welcome to give it a try - or change it to suite your own.
 
 ## Prerequisites
 
