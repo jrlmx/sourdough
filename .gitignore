@@ -1,12 +1,4 @@
-sourdough
-test/
-
-# Using Laravel/Pint to format stubs
-composer.lock
-composer.json
-vendor/
-
-# The kitchen sink
+*.vscode/
 *.idea/
 *.suo
 *.iml
@@ -19,3 +11,8 @@ config.local.json
 credentials.yml
 *.log
 cache/
+*auth.json
+*.env
+
+sourdough
+test/

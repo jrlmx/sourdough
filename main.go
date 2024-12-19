@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -10,6 +11,9 @@ import (
 
 //go:embed stubs/*
 var stubs embed.FS
+
+//go:embed deps.json
+var depsDotJson embed.FS
 
 type AuthConfig struct {
 	HTTPBasic map[string]HTTPBasicCredentials `json:"http-basic"`
@@ -20,6 +24,11 @@ type HTTPBasicCredentials struct {
 	Password string `json:"password"`
 }
 
+type PkgConfig struct {
+	Composer []string `json:"composer"`
+	NPM      []string `json:"npm"`
+}
+
 type config struct {
 	projectName string
 	projectDir  string
@@ -27,6 +36,7 @@ type config struct {
 		username string
 		password string
 	}
+	deps PkgConfig
 }
 
 func main() {
@@ -34,18 +44,25 @@ func main() {
 		log.Fatal("Usage: program <project-name>")
 	}
 
-	projectName := os.Args[1]
 	workingDir, err := os.Getwd()
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	projectName := os.Args[1]
 	projectDir := filepath.Join(workingDir, projectName)
+
+	pkgConfig, err := getPkgConfig()
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	cfg := config{
 		projectName: projectName,
 		projectDir:  projectDir,
+		deps:        pkgConfig,
 	}
 
 	for _, action := range getActions() {
@@ -68,6 +85,22 @@ func getActions() []func(cfg *config) error {
 		handleNodeDeps,
 		handlePublishFiles,
 	}
+}
+
+func getPkgConfig() (PkgConfig, error) {
+	data, err := depsDotJson.ReadFile("deps.json")
+
+	if err != nil {
+		return PkgConfig{}, fmt.Errorf("error reading embedded file: %w", err)
+	}
+
+	var cfg PkgConfig
+
+	if err := json.Unmarshal(data, &cfg); err != nil {
+		return PkgConfig{}, fmt.Errorf("error unmarshaling JSON: %v", err)
+	}
+
+	return cfg, nil
 }
 
 func cleanupOnFailure(cfg *config) error {

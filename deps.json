@@ -1,0 +1,16 @@
+{
+    "composer": [
+        "laravel/folio",
+        "livewire/livewire",
+        "livewire/volt",
+        "livewire/flux",
+        "livewire/flux-pro"
+    ],
+
+    "npm": [
+        "prettier",
+		"prettier-plugin-blade",
+		"@tailwindcss/typography",
+		"@tailwindcss/forms"
+    ]
+}

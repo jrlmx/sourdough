@@ -16,13 +16,7 @@ func handleComposerDeps(cfg *config) error {
 		return fmt.Errorf("failed to add flux ui repository: %w", err)
 	}
 
-	deps := []string{
-		"livewire/livewire",
-		"livewire/volt",
-		"laravel/folio",
-		"livewire/flux",
-		"livewire/flux-pro",
-	}
+	deps := cfg.deps.Composer
 
 	cmd := exec.Command("composer", append([]string{"require"}, deps...)...)
 	cmd.Stdout = os.Stdout

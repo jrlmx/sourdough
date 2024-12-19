@@ -1,6 +1,6 @@
 # An Opinionated Installer/Starter Kit for Laravel/Livewire with Folio, Volt, and Flux UI
 
-Yes, the installer is written in Go. No I won't compile it for you...
+Yes, the installer is written in Go...
 
 ## Overview
 
@@ -17,6 +17,7 @@ Before using this tool, make sure you have the following installed on your syste
 - **Laravel Installer**
 
 - **Go (Golang)** - needed to compile the executable.
+- **GNU Make Utility** - needed for the `make build` option.
 
 See: The [Laravel Docs](https://laravel.com/docs/11.x/installation) for instalation instructions.
 
@@ -54,7 +55,9 @@ A key feature of this tool is its use of an embedded `./stubs` directory. Any fi
 
 ## To-Do
 
+- [x] Implement a package list with composer and npm packages to be installed.
 - [ ] Add more prompts & options for package installation.
-- [ ] Implement a package list with composer and npm packages to be installed.
 - [ ] Include better error handling for unsupported systems.
 - [ ] Add fallback to composer create-project when creating the project.
+
+- [ ] Add Darkmode Selector to layout

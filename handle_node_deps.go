@@ -11,12 +11,7 @@ func handleNodeDeps(cfg *config) error {
 		return fmt.Errorf("npm is not installed")
 	}
 
-	deps := []string{
-		"prettier",
-		"prettier-plugin-blade",
-		"@tailwindcss/typography",
-		"@tailwindcss/forms",
-	}
+	deps := cfg.deps.NPM
 
 	cmd := exec.Command("npm", append([]string{"install", "-D"}, deps...)...)
 	cmd.Stdout = os.Stdout
