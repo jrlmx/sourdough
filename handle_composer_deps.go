@@ -8,6 +8,8 @@ import (
 )
 
 func handleComposerDeps(cfg *config) error {
+	fmt.Println("Installing composer dependencies...")
+
 	if err := exec.Command("which", "composer").Run(); err != nil {
 		return fmt.Errorf("composer is not installed")
 	}

@@ -1,27 +1,34 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"strings"
+
+	"golang.org/x/term"
 )
 
 func handleFluxPrompt(cfg *config) error {
-	r := bufio.NewReader(os.Stdin)
-
 	fmt.Print("Enter Flux UI Username (email): ")
-	username, _ := r.ReadString('\n')
+	username, err := term.ReadPassword(int(os.Stdin.Fd()))
+	if err != nil {
+		return fmt.Errorf("failed to read username: %w", err)
+	}
+	fmt.Println()
 
 	fmt.Print("Enter Flux UI License Key: ")
-	license, _ := r.ReadString('\n')
+	license, err := term.ReadPassword(int(os.Stdin.Fd()))
+	if err != nil {
+		return fmt.Errorf("failed to read license key: %w", err)
+	}
+	fmt.Println()
 
 	cfg.flux = &struct {
 		username string
 		password string
 	}{
-		username: strings.TrimSpace(username),
-		password: strings.TrimSpace(license),
+		username: strings.TrimSpace(string(username)),
+		password: strings.TrimSpace(string(license)),
 	}
 
 	return nil

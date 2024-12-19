@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 )
 
@@ -65,20 +66,61 @@ func main() {
 		deps:        pkgConfig,
 	}
 
-	err = handleCreateApp(&cfg)
+	err = createApp(&cfg)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	for _, action := range getActions() {
-		if err := action(&cfg); err != nil {
-			cleanupOnFailure(&cfg)
-			log.Fatal(err)
-		}
+	if err := applyStarterKit(&cfg); err != nil {
+		log.Fatal(err)
 	}
 
 	fmt.Println("Laravel project scaffolding complete!")
+}
+
+func applyStarterKit(cfg *config) error {
+	for _, action := range getActions() {
+		if err := action(cfg); err != nil {
+			cleanupOnFailure(cfg)
+			return fmt.Errorf("failed to apply starter kit: %w", err)
+		}
+	}
+	return nil
+}
+
+func createApp(cfg *config) error {
+	if err := exec.Command("which", "laravel").Run(); err != nil {
+		return fmt.Errorf(("laravel installer is not installed"))
+	}
+
+	if _, err := os.Stat(cfg.projectName); err == nil {
+		return fmt.Errorf("directory already exists: %s", cfg.projectDir)
+	}
+
+	fmt.Printf("Creating new Laravel project: %s\n", cfg.projectName)
+
+	cmd := exec.Command("laravel", "new", cfg.projectName)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("failed to create Laravel project: %w", err)
+	}
+
+	if err := os.Chdir(cfg.projectDir); err != nil {
+		return fmt.Errorf("failed to change to project directory: %w", err)
+	}
+
+	return nil
+}
+
+func cleanupOnFailure(cfg *config) error {
+	if _, err := os.Stat(cfg.projectName); err == nil {
+		if err := os.RemoveAll(cfg.projectName); err != nil {
+			return fmt.Errorf("failed to cleanup directory: %w", err)
+		}
+	}
+	return nil
 }
 
 func getActions() []func(cfg *config) error {
@@ -106,13 +148,4 @@ func getPkgConfig() (PkgConfig, error) {
 	}
 
 	return cfg, nil
-}
-
-func cleanupOnFailure(cfg *config) error {
-	if _, err := os.Stat(cfg.projectName); err == nil {
-		if err := os.RemoveAll(cfg.projectName); err != nil {
-			return fmt.Errorf("failed to cleanup directory: %w", err)
-		}
-	}
-	return nil
 }

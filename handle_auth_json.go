@@ -5,16 +5,10 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"slices"
-	"strings"
 )
 
 func handleAuthJSON(cfg *config) error {
-	if slices.ContainsFunc(cfg.deps.Composer, func(s string) bool {
-		return strings.Contains(s, "livewire/flux")
-	}) {
-		return nil
-	}
+	fmt.Println("Creating auth.json...")
 
 	authConfig := AuthConfig{
 		HTTPBasic: map[string]HTTPBasicCredentials{
