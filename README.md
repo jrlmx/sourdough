@@ -1,40 +1,40 @@
-# An installer for Laravel Livewire w/ Folio, Volt, and Flux UI
+# An Opinionated Starter Kit for Laravel/Livewire with Folio, Volt, and Flux UI
 
-Yes... it's written in Go.
+Yes, it’s written in Go.
 
 ## Overview
 
-This standalone executable will install Livewire, Folio, Volt, Flux UI - Pro and other goodies into a fresh Laravel project - you provide your Flux UI credentials and it will do the rest.
+This standalone executable streamlines the setup of Livewire, Folio, Volt, and Flux UI Pro—along with a few extras—into a fresh Laravel project. Simply provide your Flux UI credentials, and the tool takes care of the rest.
 
-This is my personal starting setup for new TALL stack projects - use it at your own risk.
+This is my go-to setup for new TALL stack projects, and while it’s tailored to my preferences, you’re welcome to try it out. Just remember: **use at your own risk.**
 
 ## Customizing
 
-One benefit of this approach is that any file placed in the ./stubs directory will be copied to the project root, preserving the same directory structure. However, be aware that this process will MERCILESSLY overwrite existing files in your project folder without warning, so proceed with caution.
+A key advantage of this tool is its use of a `./stubs` directory. Any files placed in this folder will be copied to the project root, maintaining their directory structure. However, **it will MERCILESSLY overwrite existing files** without asking—so handle with care.
 
 ## Installation
 
-### Using: "make build" command
+### Option 1: Using `make build`
 
-1. Clone this repo
-2. Navigate to the project root
-3. Run `make build` - compiles and installs the `sourdough` binary to `~/.local/bin` then makes it executable.
+1. Clone this repository.
+2. Navigate to the project root.
+3. Run `make build` to compile the `sourdough` binary, install it to `~/.local/bin`, and make it executable.
 
-### Manually: Using Go
+### Option 2: Manually with Go
 
-1. Clone this repo
-2. Run `go build -o sourdough`
-3. Move the `sourdough` binary to a location in your `$PATH` like `~/.local/bin`
+1. Clone this repository.
+2. Run `go build -o sourdough`.
+3. Move the `sourdough` binary to a directory in your `$PATH` (e.g., `~/.local/bin`).
 
 ## Usage
 
-1. Create a fresh Laravel project
-2. Navigate to the project root
-3. Run the `sourdough` command
-4. ... follow the prompts
-5. Enjoy!
+1. Create a fresh Laravel project.
+2. Navigate to the project root.
+3. Run the `sourdough` command.
+4. Follow the prompts.
+5. Enjoy your new setup!
 
-## Todo
+## To-Do
 
-- [ ] Create a fresh Laravel project before installing packages
-- [ ] Add a file to make adding or removing packages from the install list easy
+- [ ] Automate the creation of a fresh Laravel project before installation.
+- [ ] Add a configuration file to simplify adding or removing packages from the install list.
