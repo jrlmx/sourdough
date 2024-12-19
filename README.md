@@ -16,6 +16,8 @@ Before using this tool, make sure you have the following installed on your syste
 - **Composer**
 - **Laravel Installer**
 
+- **Go (Golang)** - needed to compile the executable.
+
 See: The [Laravel Docs](https://laravel.com/docs/11.x/installation) for instalation instructions.
 
 ## Customizing
