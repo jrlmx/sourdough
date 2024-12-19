@@ -1,4 +1,4 @@
-# An Opinionated Starter Kit for Laravel/Livewire with Folio, Volt, and Flux UI
+# An Opinionated Installer/Starter Kit for Laravel/Livewire with Folio, Volt, and Flux UI
 
 Yes, it’s written in Go. No I won't compile it for you...
 
