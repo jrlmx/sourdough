@@ -16,10 +16,10 @@ Before using this tool, make sure you have the following installed on your syste
 - **Composer**
 - **Laravel Installer**
 
+See: The [Laravel Docs](https://laravel.com/docs/11.x/installation) for instalation instructions.
+
 - **Go (Golang)** - needed to compile the executable.
 - **GNU Make Utility** - needed for the `make build` option.
-
-See: The [Laravel Docs](https://laravel.com/docs/11.x/installation) for instalation instructions.
 
 #### Don't have Go installed?
 
