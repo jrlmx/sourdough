@@ -65,6 +65,12 @@ func main() {
 		deps:        pkgConfig,
 	}
 
+	err = handleCreateApp(&cfg)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	for _, action := range getActions() {
 		if err := action(&cfg); err != nil {
 			cleanupOnFailure(&cfg)
@@ -77,7 +83,6 @@ func main() {
 
 func getActions() []func(cfg *config) error {
 	return []func(cfg *config) error{
-		handleCreateApp,
 		handleFluxPrompt,
 		handleAuthJSON,
 		handleGitignore,

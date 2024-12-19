@@ -5,9 +5,17 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
+	"strings"
 )
 
 func handleAuthJSON(cfg *config) error {
+	if slices.ContainsFunc(cfg.deps.Composer, func(s string) bool {
+		return strings.Contains(s, "livewire/flux")
+	}) {
+		return nil
+	}
+
 	authConfig := AuthConfig{
 		HTTPBasic: map[string]HTTPBasicCredentials{
 			"composer.fluxui.dev": {
