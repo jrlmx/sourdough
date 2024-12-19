@@ -10,7 +10,7 @@ This is my personal starting setup for new TALL stack projects - use it at your 
 
 ## Customizing
 
-One advantage to this approach is that any file you add to the ./stubs directory will be copied into the project root in the same directory structure as the stubs.
+One benefit of this approach is that any file placed in the ./stubs directory will be copied to the project root, preserving the same directory structure. However, be aware that this process will MERCILESSLY overwrite existing files in your project folder without warning, so proceed with caution.
 
 ## Installation
 
