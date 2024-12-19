@@ -20,6 +20,11 @@ Before using this tool, make sure you have the following installed on your syste
 
 See: The [Laravel Docs](https://laravel.com/docs/11.x/installation) for instalation instructions.
 
+#### Don't have Go installed?
+
+Check out another of my favorite tools - webinstall.dev || [Webi](https://webinstall.dev/) and follow this guide: [Install Go](https://webinstall.dev/golang/)
+Or go checkout the Golang Docs...
+
 ## Customizing
 
 A key feature of this tool is its use of an embedded `./stubs` directory. Any files placed in this folder (pre-build) will be copied into the new Laravel project, preserving their directory structure. However, **it will MERCILESSLY overwrite existing files** without asking—so handle with care.
@@ -38,11 +43,6 @@ A key feature of this tool is its use of an embedded `./stubs` directory. Any fi
 2. Run `go build -o sourdough`.
 3. Move the `sourdough` binary to a directory in your `$PATH` (e.g., `~/.local/bin`).
 
-#### Don't have Go installed?
-
-Check out another of my favorite tools - webinstall.dev || [Webi](https://webinstall.dev/) and follow this guide: [Install Go](https://webinstall.dev/golang/)
-Or go checkout the Golang Docs...
-
 ## Usage
 
 1. Run the `sourdough` command.
@@ -54,5 +54,6 @@ Or go checkout the Golang Docs...
 
 ## To-Do
 
-- [ ] Add more customization options for package installation.
+- [ ] Add more prompts & options for package installation.
+- [ ] Implement a package list with composer and npm packages to be installed.
 - [ ] Include better error handling for unsupported systems.

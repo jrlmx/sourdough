@@ -1,3 +1,21 @@
 sourdough
 test/
-TODO.md
+
+# Using Laravel/Pint to format stubs
+composer.lock
+composer.json
+vendor/
+
+# The kitchen sink
+*.idea/
+*.suo
+*.iml
+*.exe
+*.o
+*.a
+build/
+bin/
+config.local.json
+credentials.yml
+*.log
+cache/
