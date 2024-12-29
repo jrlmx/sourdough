@@ -10,7 +10,6 @@
     "npm": [
         "prettier",
 		"prettier-plugin-blade",
-		"@tailwindcss/typography",
-		"@tailwindcss/forms"
+		"@tailwindcss/typography"
     ]
 }

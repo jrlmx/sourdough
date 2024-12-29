@@ -8,7 +8,7 @@
         <flux:brand href="#" logo="https://fluxui.dev/img/demo/dark-mode-logo.png" name="Acme Inc." class="hidden dark:flex max-lg:!hidden" />
 
         <flux:navbar class="-mb-px max-lg:hidden">
-            <flux:navbar.item icon="home" href="{{ route('dashboard') }}" current>Dashboard</flux:navbar.item>
+            <flux:navbar.item icon="home" href="/dashboard" current>Dashboard</flux:navbar.item>
         </flux:navbar>
 
         <flux:spacer />
@@ -37,7 +37,7 @@
         <flux:brand href="#" logo="https://fluxui.dev/img/demo/dark-mode-logo.png" name="Acme Inc." class="hidden px-2 dark:flex" />
 
         <flux:navlist variant="outline">
-            <flux:navlist.item icon="home" href="{{ route('dashboard') }}" current>Dashboard</flux:navlist.item>
+            <flux:navlist.item icon="home" href="/dashboard" current>Dashboard</flux:navlist.item>
         </flux:navlist>
     </flux:sidebar>
 

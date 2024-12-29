@@ -1,20 +1,28 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func handleAuthJSON(cfg *config) error {
 	fmt.Println("Creating auth.json...")
 
+	username, license, err := fluxPrompt()
+
+	if err != nil {
+		return err
+	}
+
 	authConfig := AuthConfig{
 		HTTPBasic: map[string]HTTPBasicCredentials{
 			"composer.fluxui.dev": {
-				Username: cfg.flux.username,
-				Password: cfg.flux.password,
+				Username: username,
+				Password: license,
 			},
 		},
 	}
@@ -31,4 +39,16 @@ func handleAuthJSON(cfg *config) error {
 	}
 
 	return nil
+}
+
+func fluxPrompt() (string, string, error) {
+	r := bufio.NewReader(os.Stdin)
+
+	fmt.Print("Enter Flux UI Username (email): ")
+	username, _ := r.ReadString('\n')
+
+	fmt.Print("Enter Flux UI License Key: ")
+	license, _ := r.ReadString('\n')
+
+	return strings.TrimSpace(username), strings.TrimSpace(license), nil
 }

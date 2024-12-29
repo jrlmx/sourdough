@@ -33,11 +33,7 @@ type PkgConfig struct {
 type config struct {
 	projectName string
 	projectDir  string
-	flux        *struct {
-		username string
-		password string
-	}
-	deps PkgConfig
+	deps        PkgConfig
 }
 
 func main() {
@@ -125,7 +121,6 @@ func cleanupOnFailure(cfg *config) error {
 
 func getActions() []func(cfg *config) error {
 	return []func(cfg *config) error{
-		handleFluxPrompt,
 		handleAuthJSON,
 		handleGitignore,
 		handleComposerDeps,
