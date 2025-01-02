@@ -2,7 +2,7 @@
 
 An opinionated installer and starter kit for Laravel/Livewire projects with Folio, Volt, and Flux UI Pro integration.
 
-**Note**: I don't plan to release binaries for this tool, so you'll need to compile it yourself - if you find a compiled version of this project, make sure that you trust the source before installing/using it. You're responsible for your own security, use or misuse of this tool.
+**Note**: I do not plan to release precompiled binaries for this tool. If you come across a compiled version, please ensure you trust the source before downloading or using it. You are solely responsible for your security and any consequences resulting from the use or misuse of this tool.
 
 ## Overview
 
