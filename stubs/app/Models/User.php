@@ -56,7 +56,7 @@ class User extends Authenticatable
         return new Attribute(get: function (): string {
             $names = explode(' ', $this->name);
             $firstInitial = $names[0][0];
-            $lastInitial = end($names)[0];
+            $lastInitial = $names[count($names) - 1][0];
 
             return "{$firstInitial}{$lastInitial}";
         });
