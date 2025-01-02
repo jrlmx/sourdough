@@ -7,19 +7,19 @@ import (
 )
 
 func handleCleanUp(cfg *config) error {
-	err := cleanUpFiles(cfg.projectDir, cfg.deps.Cleanup.Files)
+	err := cleanUpFiles(cfg.projectDir, cfg.options.Cleanup.Files)
 
 	if err != nil {
 		return err
 	}
 
-	err = cleanComposerPackages(cfg.deps.Cleanup.Packages.PHP)
+	err = cleanComposerPackages(cfg.options.Cleanup.Packages.PHP)
 
 	if err != nil {
 		return err
 	}
 
-	err = cleanJSPackages(cfg.deps.Cleanup.Packages.JS)
+	err = cleanJSPackages(cfg.options.Cleanup.Packages.JS)
 
 	if err != nil {
 		return err
@@ -34,7 +34,7 @@ func cleanJSPackages(packages []string) error {
 		return nil
 	}
 
-	fmt.Println("Cleaning up node packages...")
+	fmt.Println("Cleaning up unwanted node packages...")
 
 	cmd := exec.Command("npm", append([]string{"remove"}, packages...)...)
 	cmd.Stdout = os.Stdout
@@ -52,7 +52,7 @@ func cleanComposerPackages(packages []string) error {
 		return nil
 	}
 
-	fmt.Println("Cleaning up composer packages...")
+	fmt.Println("Cleaning up unwanted composer packages...")
 
 	cmd := exec.Command("composer", append([]string{"remove"}, packages...)...)
 	cmd.Stdout = os.Stdout
@@ -70,7 +70,7 @@ func cleanUpFiles(projectDir string, files []string) error {
 		return nil
 	}
 
-	fmt.Println("Cleaning up files...")
+	fmt.Println("Cleaning up unwanted files...")
 
 	for _, file := range files {
 		err := os.Remove(projectDir + "/" + file)

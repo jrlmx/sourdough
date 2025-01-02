@@ -1,62 +1,140 @@
-# An Opinionated Installer/Starter Kit for Laravel/Livewire with Folio, Volt, and Flux UI
+# Sourdough 🍞
 
-Yes, the installer is written in Go...
+An opinionated installer and starter kit for Laravel/Livewire projects with Folio, Volt, and Flux UI Pro integration.
 
 ## Overview
 
-This standalone executable simplifies the setup of Livewire, Folio, Volt, and Flux UI Pro—along with a few extras—by creating a fresh Laravel project and configuring it with the necessary dependencies. Just provide your Flux UI credentials, and the tool takes care of the rest.
+Sourdough is a Go-based CLI tool that automates the setup of a fresh Laravel project with the complete TALL stack (Tailwind CSS, Alpine.js, Laravel, Livewire) along with Folio, Volt, and Flux UI Pro. It includes an opinionated starter kit that can be customized to your needs before compilation.
 
-This is my go-to starting point for new TALL stack projects. While it’s tailored to my preferences, you’re welcome to give it a try - or change it to suite your own.
+The tool streamlines the process by:
+- Creating a fresh Laravel project
+- Removing unwanted default Laravel scaffolding
+- Installing and configuring the TALL stack components
+- Setting up Laravel/Folio and Livewire/Volt
+- Integrating Flux UI Pro (requires valid credentials)
+- Installing customizable starter files
 
 ## Prerequisites
 
-Before using this tool, make sure you have the following installed on your system:
+- PHP
+- Composer
+- Laravel Installer (Composer create-project support coming soon)
+- Node.js and npm (yarn/pnpm support planned)
+- Go (for compilation)
+- GNU Make (optional, for `make install`)
+- Valid Flux UI Pro license
 
-- **PHP**
-- **Composer**
-- **Laravel Installer**
+For Laravel installation instructions, refer to the [official Laravel documentation](https://laravel.com/docs/installation).
 
-See: The [Laravel Docs](https://laravel.com/docs/11.x/installation) for instalation instructions.
+### Installing Go
 
-- **Go (Golang)** - needed to compile the executable.
-- **GNU Make Utility** - needed for the `make build` option.
-
-#### Don't have Go installed?
-
-Check out another of my favorite tools - webinstall.dev || [Webi](https://webinstall.dev/) and follow this guide: [Install Go](https://webinstall.dev/golang/)
-Or go checkout the Golang Docs...
-
-## Customizing
-
-A key feature of this tool is its use of an embedded `./stubs` directory. Any files placed in this folder (pre-build) will be copied into the new Laravel project, preserving their directory structure. However, **it will MERCILESSLY overwrite existing files** without asking—so handle with care.
+If you don't have Go installed, you can use [webinstall.dev](https://webinstall.dev/):
+```bash
+# Using webinstall.dev
+curl -sS https://webinstall.dev/golang | bash
+```
+Or follow the instructions in the [official Go documentation](https://golang.org/doc/install).
 
 ## Installation
 
-### Option 1: Using `make build`
+### Option 1: Using Make (Fastest - if you're using WSL or Ubuntu)
+```bash
+# 1. Clone the repository
+git clone https://github.com/yourusername/sourdough.git
 
-1. Clone this repository.
-2. Navigate to the project root.
-3. Run `make build` to compile the `sourdough` binary, install it to `~/.local/bin`, and make it executable.
+# 2. Navigate to the project
+cd sourdough
 
-### Option 2: Manually with Go
+# 3. Build and install (this will compile the binary and move it to ~/.local/bin)
+make install
+```
 
-1. Clone this repository.
-2. Run `go build -o sourdough`.
-3. Move the `sourdough` binary to a directory in your `$PATH` (e.g., `~/.local/bin`).
+### Option 2: Manual Go Installation (Recommended)
+```bash
+# 1. Clone the repository
+git clone https://github.com/yourusername/sourdough.git
+
+# 2. Navigate to the project
+cd sourdough
+
+# 3. Build the binary
+go build -o sourdough
+
+# 4. Move to a directory in your PATH (e.g., ~/.local/bin)
+# I'm using Ubuntu on WSL, so I moved it to ~/.local/bin
+mv sourdough ~/.local/bin/
+chmod +x ~/.local/bin/sourdough
+```
 
 ## Usage
 
-1. Run the `sourdough` command.
-2. Follow the prompts to:
-   - Create a fresh Laravel project.
-   - Install Livewire, Folio, Volt, Flux UI Pro, and other goodies.
-   - Scaffold a typical auth-flow, profile, and layout(s)
-3. Enjoy your new setup!
+1. Run the installer:
+```bash
+sourdough
+```
 
-## To-Do
+2. Follow the interactive prompts to:
+   - Specify your project details
+   - Enter your Flux UI Pro credentials
+   - Configure any custom options
 
-- [x] Implement a package list with composer and npm packages to be installed.
-- [x] Add Darkmode Selector to layout
-- [ ] Add more prompts & options for package installation.
-- [ ] Add fallback to composer create-project when creating the project.
-- [ ] Remove Welcome page after Laravel project is created.
+3. The tool will automatically:
+   - Create a fresh Laravel project
+   - Install and configure all dependencies
+   - Set up authentication flows
+   - Apply your custom starter kit
+   - Remove unwanted packages/files
+
+## Customization
+
+### Starter Kit Templates
+
+The tool uses an embedded `./stubs` directory for custom templates. Any files placed in this directory before compilation will be copied into new projects, maintaining their directory structure.
+
+⚠️ **Warning**: Files from the starter kit will overwrite existing files without prompting.
+
+### Configuration
+
+Project dependencies and file cleanup can be customized through the `config.json` file before compilation. Edit this file to:
+- Add/remove packages to be installed
+- Specify files to be removed from the default Laravel installation
+- Configure other build preferences
+
+Example `config.json`:
+```json
+{
+   // Specify PHP and JS packages to be installed
+   "packages": {
+       "php": [
+           "laravel/folio",
+           "livewire/livewire",
+           "livewire/volt",
+           "livewire/flux",
+           "livewire/flux-pro"
+       ],
+       "js": [
+           "prettier",
+           "prettier-plugin-blade",
+           "@tailwindcss/typography"
+       ]
+   },
+   "cleanup": {
+       // Specify files to be removed from the default Laravel installation
+       "files": [
+           "resources/views/welcome.blade.php"
+       ],
+       // Specify PHP and JS packages to be removed
+       "packages": {
+           "php": [],
+           "js": []
+       }
+   }
+}
+```
+
+## Roadmap
+
+- [ ] Offer to install PHP, Composer, and Laravel installer via Laravel's `php.new` command
+- [ ] Support for `composer create-project` as an alternative to the Laravel installer
+- [ ] Package manager alternatives (yarn, pnpm)
+- [ ] Additional starter kit templates

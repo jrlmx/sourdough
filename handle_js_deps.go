@@ -11,7 +11,7 @@ func handleJSDeps(cfg *config) error {
 		return fmt.Errorf("npm is not installed")
 	}
 
-	deps := cfg.deps.Packages.JS
+	deps := cfg.options.Packages.JS
 
 	cmd := exec.Command("npm", append([]string{"install", "-D"}, deps...)...)
 	cmd.Stdout = os.Stdout

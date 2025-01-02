@@ -13,7 +13,7 @@ import (
 //go:embed stubs/*
 var stubs embed.FS
 
-//go:embed deps.json
+//go:embed config.json
 var depsDotJson embed.FS
 
 type AuthConfig struct {
@@ -25,7 +25,7 @@ type HTTPBasicCredentials struct {
 	Password string `json:"password"`
 }
 
-type PkgConfig struct {
+type Options struct {
 	Packages struct {
 		PHP []string `json:"php"`
 		JS  []string `json:"js"`
@@ -42,7 +42,7 @@ type PkgConfig struct {
 type config struct {
 	projectName string
 	projectDir  string
-	deps        PkgConfig
+	options     Options
 }
 
 func main() {
@@ -68,7 +68,7 @@ func main() {
 	cfg := config{
 		projectName: projectName,
 		projectDir:  projectDir,
-		deps:        pkgConfig,
+		options:     pkgConfig,
 	}
 
 	err = createApp(&cfg)
@@ -139,17 +139,17 @@ func getActions() []func(cfg *config) error {
 	}
 }
 
-func getPkgConfig() (PkgConfig, error) {
-	data, err := depsDotJson.ReadFile("deps.json")
+func getPkgConfig() (Options, error) {
+	data, err := depsDotJson.ReadFile("config.json")
 
 	if err != nil {
-		return PkgConfig{}, fmt.Errorf("error reading embedded file: %w", err)
+		return Options{}, fmt.Errorf("error reading embedded file: %w", err)
 	}
 
-	var cfg PkgConfig
+	var cfg Options
 
 	if err := json.Unmarshal(data, &cfg); err != nil {
-		return PkgConfig{}, fmt.Errorf("error unmarshaling JSON: %v", err)
+		return Options{}, fmt.Errorf("error unmarshaling JSON: %v", err)
 	}
 
 	return cfg, nil

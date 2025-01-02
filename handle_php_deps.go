@@ -18,7 +18,7 @@ func handlePHPDeps(cfg *config) error {
 		return fmt.Errorf("failed to add flux ui repository: %w", err)
 	}
 
-	deps := cfg.deps.Packages.PHP
+	deps := cfg.options.Packages.PHP
 
 	cmd := exec.Command("composer", append([]string{"require"}, deps...)...)
 	cmd.Stdout = os.Stdout
