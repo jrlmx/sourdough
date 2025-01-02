@@ -62,3 +62,17 @@ it('can delete account', function (): void {
 
     $this->assertNull(User::find($user->id));
 });
+
+it('cannot delete account with invalid password', function (): void {
+    $user = User::factory()->create();
+
+    $this->actingAs($user);
+
+    $component = Volt::test('profile.delete_account')
+        ->set('current_password', 'wrong-password')
+        ->call('deleteAccount')
+        ->assertHasErrors(['current_password'])
+        ->assertNoRedirect();
+
+    $this->assertNotNull($user->fresh());
+});
