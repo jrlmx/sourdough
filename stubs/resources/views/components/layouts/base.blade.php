@@ -26,23 +26,17 @@
     <!-- Scripts -->
     @vite('resources/js/app.js')
     @stack('head.scripts')
-    <!-- Dark Mode: Get User Preference -->
-    <script defer>
-        if (localStorage.getItem('flux.appearance') === 'dark' || (!('prefers-color-scheme' in window) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark')
-        }
-    </script>
 </head>
 
-<body class="min-h-screen bg-white text-black dark:bg-zinc-800 dark:text-white">
+<body {{ $attributes->merge(['class' => 'min-h-screen bg-white text-black dark:bg-zinc-800 dark:text-white']) }}>
     {{ $slot }}
+
+    @fluxScripts
+    @stack('body.scripts')
 
     @persist('toast')
         <flux:toast />
     @endpersist
-
-    @fluxScripts
-    @stack('body.scripts')
 </body>
 
 </html>

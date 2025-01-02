@@ -49,17 +49,18 @@ $login = function () {
         return;
     }
 
-    $this->redirectIntended(route('dashboard'), navigate: true);
+    $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
 };
 
 ?>
+
 
 <x-layouts.auth pg_title="Sign in">
     @volt('auth.login')
         <div>
             <form wire:submit="login" class="space-y-3">
                 <flux:input label="Email" wire:model="email" type="email" placeholder="email@domain.ext" autofocus />
-                <flux:input label="Password" wire:model="password" type="password" />
+                <flux:input label="Password" wire:model="password" type="password" viewable />
                 <flux:checkbox label="Remember Me" wire:model="remember" />
                 <flux:button type="submit" variant="primary" class="w-full">Sign in</flux:button>
             </form>

@@ -2,10 +2,10 @@
 
 use App\Livewire\Actions\Logout;
 
-use function Livewire\Volt\{state};
+use function Livewire\Volt\state;
 
 state([
-    'component' => 'flux:button',
+    'component' => null,
     'icon' => null,
     'text' => __('Logout'),
 ])->locked();
@@ -18,6 +18,13 @@ $logout = function (Logout $action) {
 
 ?>
 
-<x-dynamic-component :$component :$icon wire:click="logout">
-    {{ $text }}
-</x-dynamic-component>
+
+@if ($component)
+    <x-dynamic-component :$component :$icon wire:click="logout">
+        {{ $text }}
+    </x-dynamic-component>
+@else
+    <flux:button :icon="$icon" variant="ghost" wire:click="logout">
+        {{ $text }}
+    </flux:button>
+@endif

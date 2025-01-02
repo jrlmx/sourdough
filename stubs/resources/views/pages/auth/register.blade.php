@@ -29,11 +29,13 @@ rules([
 $register = function () {
     $this->validate();
 
-    $this->user = User::create($this->only('name', 'email', 'password'));
+    $user = User::create($this->only('name', 'email', 'password'));
 
-    event(new Registered($this->user));
+    event(new Registered($user));
 
-    $this->redirectIntended(route('dashboard'), navigate: true);
+    auth()->login($user);
+
+    $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
 };
 
 ?>

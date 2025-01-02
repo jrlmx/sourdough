@@ -3,11 +3,12 @@
 use Flux\Flux;
 use Illuminate\Validation\Rule;
 
-use function Livewire\Volt\{state, mount, rules};
+use function Livewire\Volt\rules;
+use function Livewire\Volt\state;
 
 state([
-    'name' => '',
-    'email' => '',
+    'name' => fn () => auth()->user()->name,
+    'email' => fn () => auth()->user()->email,
 ]);
 
 rules([
@@ -15,35 +16,31 @@ rules([
     'email' => ['required', 'string', 'email', 'lowercase', 'max:255', Rule::unique('users')->ignore(auth()->user()->id)],
 ]);
 
-mount(function (): void {
-    $this->name = auth()->user()->name;
-    $this->email = auth()->user()->email;
-});
-
-$update = function (): void {
+$updateAccount = function (): void {
     $this->validate();
 
     $user = auth()->user();
 
-    if ($this->email !== auth()->user()->email) {
+    $user->fill($this->only('name', 'email'));
+
+    if ($user->isDirty('email')) {
         $user->email_verified_at = null;
     }
 
-    auth()->user()->update($this->only('name', 'email'));
+    $user->save();
 
     Flux::toast('Profile updated.');
 };
 
 ?>
 
+
 <div>
-    <form wire:submit="update" class="space-y-6">
+    <form wire:submit="updateAccount" class="space-y-6">
         <flux:input type="text" label="Name" wire:model="name" placeholder="Name" required autofocus />
 
         <flux:input type="email" label="Email" wire:model="email" placeholder="Email" required />
 
-        <flux:button type="submit" variant="primary" wire:loading.attr="disabled" class="w-full">
-            Save
-        </flux:button>
+        <flux:button type="submit" variant="primary" wire:loading.attr="disabled" class="w-full">Save</flux:button>
     </form>
 </div>

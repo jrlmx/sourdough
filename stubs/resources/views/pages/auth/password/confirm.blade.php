@@ -42,9 +42,10 @@ $confirm = function (): void {
 
 ?>
 
+
 <x-layouts.auth pg_title="Confirm Password">
     <p>This is a secure area of the application. Please confirm your password before continuing.</p>
-    @volt('auth.password.confirm')
+    @volt('password.confirm')
         <div>
             <form wire:submit="confirm" class="space-y-3">
                 <flux:input type="password" label="password" wire:model="password" placeholder="Password" required />

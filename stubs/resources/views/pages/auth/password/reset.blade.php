@@ -15,7 +15,7 @@ state(['email' => '']);
 
 rules(['email' => ['required', 'string', 'email']]);
 
-$sendPasswordResetLink = function (): void {
+$sendResetLink = function (): void {
     $this->validate();
 
     $status = Password::sendResetLink($this->only('email'));
@@ -32,6 +32,7 @@ $sendPasswordResetLink = function (): void {
 };
 ?>
 
+
 <x-layouts.auth pg_title="Reset Password">
     <p>Please enter your email address to request a password reset link.</p>
     @volt('password.request')
@@ -40,7 +41,7 @@ $sendPasswordResetLink = function (): void {
                 <small>{{ session('status') }}</small>
             @endif
 
-            <form wire:submit.prevent="sendPasswordResetLink" class="space-y-4">
+            <form wire:submit.prevent="sendResetLink" class="space-y-4">
                 <flux:input type="email" label="Email" wire:model="email" placeholder="Email" autofocus required />
                 <flux:button type="submit" class="outline" wire:loading.attr="disabled" class="w-full">Send Password Reset Link</flux:button>
             </form>

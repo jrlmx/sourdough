@@ -29,7 +29,7 @@ rules([
 $resetPassword = function (): void {
     $this->validate();
 
-    $status = Password::reset($this->only('email', 'password'), function ($user, $password) {
+    $status = Password::reset($this->only('email', 'password', 'password_confirmation', 'token'), function ($user, $password) {
         $user
             ->forceFill([
                 'password' => $password,
@@ -53,8 +53,9 @@ $resetPassword = function (): void {
 
 ?>
 
+
 <x-layouts.auth pg_title="Reset Password">
-    @volt('auth.password.reset')
+    @volt('password.reset')
         <div>
             <form wire:submit="resetPassword" class="space-y-3">
                 <flux:input type="email" label="email" wire:model="email" autofocus placeholder="email@domain.ext" required />
