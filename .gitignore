@@ -13,6 +13,7 @@ credentials.yml
 cache/
 *auth.json
 *.env
+.prettierrc
 
 sourdough
 test/

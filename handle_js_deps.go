@@ -6,12 +6,12 @@ import (
 	"os/exec"
 )
 
-func handleNodeDeps(cfg *config) error {
+func handleJSDeps(cfg *config) error {
 	if err := exec.Command("which", "npm").Run(); err != nil {
 		return fmt.Errorf("npm is not installed")
 	}
 
-	deps := cfg.deps.NPM
+	deps := cfg.deps.Packages.JS
 
 	cmd := exec.Command("npm", append([]string{"install", "-D"}, deps...)...)
 	cmd.Stdout = os.Stdout

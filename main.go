@@ -26,8 +26,17 @@ type HTTPBasicCredentials struct {
 }
 
 type PkgConfig struct {
-	Composer []string `json:"composer"`
-	NPM      []string `json:"npm"`
+	Packages struct {
+		PHP []string `json:"php"`
+		JS  []string `json:"js"`
+	}
+	Cleanup struct {
+		Files    []string `json:"files"`
+		Packages struct {
+			PHP []string `json:"php"`
+			JS  []string `json:"js"`
+		}
+	}
 }
 
 type config struct {
@@ -122,11 +131,11 @@ func cleanupOnFailure(cfg *config) error {
 func getActions() []func(cfg *config) error {
 	return []func(cfg *config) error{
 		handleAuthJSON,
-		handleGitignore,
-		handleComposerDeps,
-		handleNodeDeps,
-		handlePublishFiles,
 		handleCleanUp,
+		handleGitignore,
+		handlePHPDeps,
+		handleJSDeps,
+		handlePublishFiles,
 	}
 }
 

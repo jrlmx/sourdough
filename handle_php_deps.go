@@ -7,7 +7,7 @@ import (
 	"os/exec"
 )
 
-func handleComposerDeps(cfg *config) error {
+func handlePHPDeps(cfg *config) error {
 	fmt.Println("Installing composer dependencies...")
 
 	if err := exec.Command("which", "composer").Run(); err != nil {
@@ -18,7 +18,7 @@ func handleComposerDeps(cfg *config) error {
 		return fmt.Errorf("failed to add flux ui repository: %w", err)
 	}
 
-	deps := cfg.deps.Composer
+	deps := cfg.deps.Packages.PHP
 
 	cmd := exec.Command("composer", append([]string{"require"}, deps...)...)
 	cmd.Stdout = os.Stdout

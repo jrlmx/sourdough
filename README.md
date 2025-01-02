@@ -56,7 +56,7 @@ A key feature of this tool is its use of an embedded `./stubs` directory. Any fi
 ## To-Do
 
 - [x] Implement a package list with composer and npm packages to be installed.
+- [x] Add Darkmode Selector to layout
 - [ ] Add more prompts & options for package installation.
 - [ ] Add fallback to composer create-project when creating the project.
-- [ ] Add Darkmode Selector to layout
 - [ ] Remove Welcome page after Laravel project is created.

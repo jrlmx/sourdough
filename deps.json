@@ -1,15 +1,13 @@
 {
-    "composer": [
-        "laravel/folio",
-        "livewire/livewire",
-        "livewire/volt",
-        "livewire/flux",
-        "livewire/flux-pro"
-    ],
-
-    "npm": [
-        "prettier",
-		"prettier-plugin-blade",
-		"@tailwindcss/typography"
-    ]
+    "packages": {
+        "php": ["laravel/folio", "livewire/livewire", "livewire/volt", "livewire/flux", "livewire/flux-pro"],
+        "js": ["prettier", "prettier-plugin-blade", "@tailwindcss/typography"]
+    },
+    "cleanup": {
+        "files": ["resources/views/welcome.blade.php"],
+        "packages": {
+            "php": [],
+            "js": []
+        }
+    }
 }
