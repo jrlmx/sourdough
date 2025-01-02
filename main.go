@@ -126,6 +126,7 @@ func getActions() []func(cfg *config) error {
 		handleComposerDeps,
 		handleNodeDeps,
 		handlePublishFiles,
+		handleCleanUp,
 	}
 }
 

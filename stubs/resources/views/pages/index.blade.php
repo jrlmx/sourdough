@@ -5,16 +5,15 @@
 
             <p class="prose dark:prose-invert">A highly customizable TALL Stack + Flux UI installer/starter-kit for your next Laravel project.</p>
 
-            <div class="flex justify-between gap-2">
+            <div class="flex justify-between items-center gap-6">
                 <a href="https://github.com/jrlmx/sourdough" class="hover:underline">GitHub</a>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-6">
                     @auth
-                        <a href="{{ route('dashboard') }}" class="hover:underline">Dashboard</a>
-                        <a href="{{ route('logout') }}" class="hover:underline">Logout</a>
+                        <flux:button variant="ghost" icon="home" href="{{ route('dashboard') }}" wire:navigate class="hover:underline">Dashboard</flux:button>
+                        <livewire:auth.logout icon="arrow-right-start-on-rectangle" />
                     @else
-                        <a href="{{ route('login') }}" class="hover:underline">Login</a>
-                        <flux:separator vertical />
-                        <a href="{{ route('register') }}" class="hover:underline">Register</a>
+                        <flux:button variant="ghost" href="{{ route('login') }}" icon="arrow-right-start-on-rectangle" wire:navigate>Login</flux:button>
+                        <flux:button variant="ghost" href="{{ route('register') }}" icon="arrow-right-start-on-rectangle" wire:navigate>Register</flux:button>
                     @endauth
                 </div>
             </div>
