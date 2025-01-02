@@ -6,10 +6,16 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 )
 
 func handleAuthJSON(cfg *config) error {
+	if !slices.Contains(cfg.options.Packages.PHP, "livewire/flux-pro") {
+		fmt.Println("Skipping auth.json creation - Flux UI Pro is not in the project dependencies.")
+		return nil
+	}
+
 	fmt.Println("Creating auth.json...")
 
 	username, license, err := fluxPrompt()
