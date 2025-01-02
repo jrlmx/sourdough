@@ -59,3 +59,4 @@ A key feature of this tool is its use of an embedded `./stubs` directory. Any fi
 - [ ] Add more prompts & options for package installation.
 - [ ] Add fallback to composer create-project when creating the project.
 - [ ] Add Darkmode Selector to layout
+- [ ] Remove Welcome page after Laravel project is created.
