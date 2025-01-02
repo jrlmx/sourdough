@@ -2,6 +2,8 @@
 
 An opinionated installer and starter kit for Laravel/Livewire projects with Folio, Volt, and Flux UI Pro integration.
 
+**Note**: I don't plan to release binaries for this tool, so you'll need to compile it yourself - if you find a compiled version of this project, make sure that you trust the source before installing/using it. You're responsible for your own security.
+
 ## Overview
 
 Sourdough is a Go-based CLI tool that automates the setup of a fresh Laravel project with the complete TALL stack (Tailwind CSS, Alpine.js, Laravel, Livewire) along with Folio, Volt, and Flux UI Pro. It includes an opinionated starter kit that can be customized to your needs before compilation.

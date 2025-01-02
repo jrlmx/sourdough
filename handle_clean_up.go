@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"strings"
 )
 
 func handleCleanUp(cfg *config) error {
@@ -73,7 +75,17 @@ func cleanUpFiles(projectDir string, files []string) error {
 	fmt.Println("Cleaning up unwanted files...")
 
 	for _, file := range files {
-		err := os.Remove(projectDir + "/" + file)
+		cleanPath := filepath.Clean(projectDir + "/" + file)
+
+		if strings.Contains(cleanPath, "..") {
+			return fmt.Errorf("parent directory traversal is not allowed: %s", cleanPath)
+		}
+
+		if !strings.Contains(cleanPath, projectDir) {
+			return fmt.Errorf("file is not in project directory: %s", cleanPath)
+		}
+
+		err := os.Remove(cleanPath)
 
 		if err != nil {
 			return err
