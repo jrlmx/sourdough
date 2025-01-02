@@ -103,7 +103,7 @@ Project dependencies and file cleanup can be customized through the `config.json
 Example `config.json`:
 ```json
 {
-   // Specify PHP and JS packages to be installed
+   # Specify PHP and JS packages to be installed
    "packages": {
        "php": [
            "laravel/folio",
@@ -119,11 +119,11 @@ Example `config.json`:
        ]
    },
    "cleanup": {
-       // Specify files to be removed from the default Laravel installation
+       # Specify files to be removed from the default Laravel installation
        "files": [
            "resources/views/welcome.blade.php"
        ],
-       // Specify PHP and JS packages to be removed
+       # Specify PHP and JS packages to be removed
        "packages": {
            "php": [],
            "js": []
