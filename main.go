@@ -30,6 +30,9 @@ type Options struct {
 		PHP []string `json:"php"`
 		JS  []string `json:"js"`
 	}
+	Artisan struct {
+		Commands []string `json:"commands"`
+	}
 	Cleanup struct {
 		Files    []string `json:"files"`
 		Packages struct {
@@ -59,7 +62,7 @@ func main() {
 	projectName := os.Args[1]
 	projectDir := filepath.Join(workingDir, projectName)
 
-	pkgConfig, err := getPkgConfig()
+	pkgConfig, err := getConfigDotJson()
 
 	if err != nil {
 		log.Fatal(err)
@@ -105,10 +108,7 @@ func createApp(cfg *config) error {
 
 	fmt.Printf("Creating new Laravel project: %s\n", cfg.projectName)
 
-	cmd := exec.Command("laravel", "new", cfg.projectName)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
+	if err := runCommand("laravel", "new", cfg.projectName); err != nil {
 		return fmt.Errorf("failed to create Laravel project: %w", err)
 	}
 
@@ -139,7 +139,7 @@ func getActions() []func(cfg *config) error {
 	}
 }
 
-func getPkgConfig() (Options, error) {
+func getConfigDotJson() (Options, error) {
 	data, err := configDotJson.ReadFile("config.json")
 
 	if err != nil {

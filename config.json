@@ -3,6 +3,9 @@
         "php": ["laravel/folio", "livewire/livewire", "livewire/volt", "livewire/flux", "livewire/flux-pro"],
         "js": ["prettier", "prettier-plugin-blade", "@tailwindcss/typography"]
     },
+    "artisan": {
+        "commands": ["folio:install", "volt:install"]
+    },
     "cleanup": {
         "files": ["resources/views/welcome.blade.php"],
         "packages": {

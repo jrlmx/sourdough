@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"os"
 	"os/exec"
 )
 
@@ -20,24 +18,15 @@ func handlePHPDeps(cfg *config) error {
 
 	deps := cfg.options.Packages.PHP
 
-	cmd := exec.Command("composer", append([]string{"require"}, deps...)...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
+	if err := runCommand("composer", append([]string{"require"}, deps...)...); err != nil {
 		return fmt.Errorf("failed to install composer dependencies: %w", err)
 	}
 
-	artisanCmds := []string{
-		"folio:install",
-		"volt:install",
-	}
+	artisanCmds := cfg.options.Artisan.Commands
 
-	for _, artisanCmd := range artisanCmds {
-		cmd := exec.Command("php", "artisan", artisanCmd)
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		if err := cmd.Run(); err != nil {
-			log.Printf("Failed to run %s: %v", artisanCmd, err)
+	for _, cmd := range artisanCmds {
+		if err := runCommand("php", append([]string{"artisan"}, cmd)...); err != nil {
+			return fmt.Errorf("failed to run %s: %v", cmd, err)
 		}
 	}
 

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"os/exec"
 )
 
@@ -13,10 +12,7 @@ func handleJSDeps(cfg *config) error {
 
 	deps := cfg.options.Packages.JS
 
-	cmd := exec.Command("npm", append([]string{"install", "-D"}, deps...)...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
+	if err := runCommand("npm", append([]string{"install", "-D"}, deps...)...); err != nil {
 		return fmt.Errorf("failed to install node dependencies: %w", err)
 	}
 
