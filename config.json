@@ -1,16 +1,18 @@
 {
     "php": {
+        "manager": "composer",
+        "dev-flag": "--dev",
         "prod": ["laravel/folio", "livewire/livewire", "livewire/volt", "livewire/flux", "livewire/flux-pro"],
         "dev": ["barryvdh/laravel-debugbar"],
         "remove": []
     },
     "js": {
+        "manager": "npm",
+        "dev-flag": "-D",
         "prod": [],
         "dev": ["prettier", "prettier-plugin-blade", "@tailwindcss/typography"],
         "remove": []
     },
     "artisan": ["folio:install", "volt:install"],
-    "files": {
-        "remove": ["resources/views/welcome.blade.php"]
-    }
+    "files": ["resources/views/welcome.blade.php"]
 }
