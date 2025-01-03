@@ -103,32 +103,20 @@ Project dependencies and file cleanup can be customized through the `config.json
 Example `config.json`:
 ```json
 {
-   // Specify PHP and JS packages to be installed
-   "packages": {
-       "php": [
-           "laravel/folio",
-           "livewire/livewire",
-           "livewire/volt",
-           "livewire/flux",
-           "livewire/flux-pro"
-       ],
-       "js": [
-           "prettier",
-           "prettier-plugin-blade",
-           "@tailwindcss/typography"
-       ]
-   },
-   "cleanup": {
-       // Specify files to be removed from the default Laravel installation
-       "files": [
-           "resources/views/welcome.blade.php"
-       ],
-       // Specify PHP and JS packages to be removed
-       "packages": {
-           "php": [],
-           "js": []
-       }
-   }
+    "php": {
+        "prod": ["laravel/folio", "livewire/livewire", "livewire/volt", "livewire/flux", "livewire/flux-pro"],
+        "dev": ["barryvdh/laravel-debugbar"],
+        "remove": []
+    },
+    "js": {
+        "prod": [],
+        "dev": ["prettier", "prettier-plugin-blade", "@tailwindcss/typography"],
+        "remove": []
+    },
+    "artisan": ["folio:install", "volt:install"],
+    "files": {
+        "remove": ["resources/views/welcome.blade.php"]
+    }
 }
 ```
 
