@@ -1,13 +1,14 @@
 package main
 
 import (
-	"bufio"
 	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
 	"slices"
 	"strings"
+
+	"github.com/charmbracelet/huh"
 )
 
 func handleAuthJSON(cfg *config) error {
@@ -48,13 +49,21 @@ func handleAuthJSON(cfg *config) error {
 }
 
 func fluxPrompt() (string, string, error) {
-	r := bufio.NewReader(os.Stdin)
+	var (
+		username string
+		password string
+	)
 
-	fmt.Print("Enter Flux UI Username (email): ")
-	username, _ := r.ReadString('\n')
+	form := huh.NewForm(
+		huh.NewGroup(
+			huh.NewInput().Title("Enter your FLux UI Username").EchoMode(huh.EchoModePassword).Value(&username),
+			huh.NewInput().Title("Enter your Flux Licence Key").EchoMode(huh.EchoModePassword).Value(&password),
+		),
+	)
 
-	fmt.Print("Enter Flux UI License Key: ")
-	license, _ := r.ReadString('\n')
+	if err := form.Run(); err != nil {
+		return "", "", fmt.Errorf("failed receiving flux credentials: %w", err)
+	}
 
-	return strings.TrimSpace(username), strings.TrimSpace(license), nil
+	return strings.TrimSpace(username), strings.TrimSpace(password), nil
 }
