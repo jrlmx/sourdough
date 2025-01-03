@@ -10,13 +10,13 @@ func handleJSDeps(cfg *config) error {
 		return fmt.Errorf("npm is not installed")
 	}
 
-	prod := cfg.options.JS.Prod
+	prod := cfg.opts.JS.Prod
 
 	if err := runCommand("npm", append([]string{"install", "-D"}, prod...)...); err != nil {
 		return fmt.Errorf("failed to install node dependencies: %w", err)
 	}
 
-	dev := cfg.options.JS.Dev
+	dev := cfg.opts.JS.Dev
 
 	if err := runCommand("npm", append([]string{"install", "-D"}, dev...)...); err != nil {
 		return fmt.Errorf("failed to install node dependencies: %w", err)

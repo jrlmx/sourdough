@@ -16,19 +16,19 @@ func handlePHPDeps(cfg *config) error {
 		return fmt.Errorf("failed to add flux ui repository: %w", err)
 	}
 
-	prod := cfg.options.PHP.Prod
+	prod := cfg.opts.PHP.Prod
 
 	if err := runCommand("composer", append([]string{"require"}, prod...)...); err != nil {
 		return fmt.Errorf("failed to install composer dependencies: %w", err)
 	}
 
-	dev := cfg.options.PHP.Dev
+	dev := cfg.opts.PHP.Dev
 
 	if err := runCommand("composer", append([]string{"require", "--dev"}, dev...)...); err != nil {
 		return fmt.Errorf("failed to install composer dependencies: %w", err)
 	}
 
-	artisanCmds := cfg.options.Artisan
+	artisanCmds := cfg.opts.Artisan
 
 	for _, cmd := range artisanCmds {
 		if err := runCommand("php", append([]string{"artisan"}, cmd)...); err != nil {

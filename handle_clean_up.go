@@ -8,19 +8,19 @@ import (
 )
 
 func handleCleanUp(cfg *config) error {
-	err := cleanUpFiles(cfg.projectDir, cfg.options.Files)
+	err := cleanUpFiles(cfg.projectDir, cfg.opts.Files)
 
 	if err != nil {
 		return err
 	}
 
-	err = cleanComposerPackages(cfg.options.PHP.Remove)
+	err = cleanComposerPackages(cfg.opts.PHP.Remove)
 
 	if err != nil {
 		return err
 	}
 
-	err = cleanJSPackages(cfg.options.JS.Remove)
+	err = cleanJSPackages(cfg.opts.JS.Remove)
 
 	if err != nil {
 		return err

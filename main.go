@@ -26,9 +26,9 @@ type HTTPBasicCredentials struct {
 }
 
 type PackageOptions struct {
-	Prod   []string `json: "prod"`
-	Dev    []string `json: "dev"`
-	Remove []string `json: "remove"`
+	Prod   []string `json:"prod"`
+	Dev    []string `json:"dev"`
+	Remove []string `json:"remove"`
 }
 
 type Options struct {
@@ -41,7 +41,7 @@ type Options struct {
 type config struct {
 	projectName string
 	projectDir  string
-	options     Options
+	opts        Options
 }
 
 func main() {
@@ -67,7 +67,7 @@ func main() {
 	cfg := config{
 		projectName: projectName,
 		projectDir:  projectDir,
-		options:     pkgConfig,
+		opts:        pkgConfig,
 	}
 
 	err = createApp(&cfg)
