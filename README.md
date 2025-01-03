@@ -1,6 +1,6 @@
 # Sourdough 🍞
 
-An opinionated installer and starter kit for Laravel/Livewire projects with Folio, Volt, and Flux UI Pro integration. This is my go-to starting point for new TALL stack projects - it's primarily intended for my own use, but feel free to give it a try.
+An opinionated (or not) installer and starter kit for Laravel/Livewire projects with Folio, Volt, and Flux UI Pro integration. This is my go-to starting point for new TALL stack projects - it's primarily intended for my own use, but feel free to give it a try.
 
 **Note**: I do not plan to release precompiled binaries for this tool. If you come across a compiled version, please ensure you trust the source before downloading or using it. You are solely responsible for your security and any consequences resulting from the use or misuse of this tool.
 

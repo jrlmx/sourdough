@@ -14,7 +14,7 @@ import (
 var stubs embed.FS
 
 //go:embed config.json
-var depsDotJson embed.FS
+var configDotJson embed.FS
 
 type AuthConfig struct {
 	HTTPBasic map[string]HTTPBasicCredentials `json:"http-basic"`
@@ -140,7 +140,7 @@ func getActions() []func(cfg *config) error {
 }
 
 func getPkgConfig() (Options, error) {
-	data, err := depsDotJson.ReadFile("config.json")
+	data, err := configDotJson.ReadFile("config.json")
 
 	if err != nil {
 		return Options{}, fmt.Errorf("error reading embedded file: %w", err)
