@@ -3,7 +3,7 @@
         "manager": "composer",
         "dev-flag": "--dev",
         "prod": ["laravel/folio", "livewire/livewire", "livewire/volt", "livewire/flux", "livewire/flux-pro"],
-        "dev": ["barryvdh/laravel-debugbar"],
+        "dev": [],
         "remove": []
     },
     "js": {
@@ -14,5 +14,5 @@
         "remove": []
     },
     "artisan": ["folio:install", "volt:install"],
-    "files": ["resources/views/welcome.blade.php"]
+    "files": { "remove": ["resources/views/welcome.blade.php"] }
 }

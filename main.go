@@ -34,7 +34,7 @@ type PackageOptions struct {
 type Options struct {
 	PHP     PackageOptions `json:"php"`
 	JS      PackageOptions `json:"js"`
-	Files   []string       `json:"files"`
+	Files   []string       `json:"files.remove"`
 	Artisan []string       `json:"artisan"`
 }
 
