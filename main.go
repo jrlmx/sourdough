@@ -25,21 +25,17 @@ type HTTPBasicCredentials struct {
 	Password string `json:"password"`
 }
 
+type PackageOptions struct {
+	Prod   []string `json: "prod"`
+	Dev    []string `json: "dev"`
+	Remove []string `json: "remove"`
+}
+
 type Options struct {
-	Packages struct {
-		PHP []string `json:"php"`
-		JS  []string `json:"js"`
-	}
-	Artisan struct {
-		Commands []string `json:"commands"`
-	}
-	Cleanup struct {
-		Files    []string `json:"files"`
-		Packages struct {
-			PHP []string `json:"php"`
-			JS  []string `json:"js"`
-		}
-	}
+	PHP     PackageOptions `json:"php"`
+	JS      PackageOptions `json:"js"`
+	Files   []string       `json:"files"`
+	Artisan []string       `json:"artisan"`
 }
 
 type config struct {
