@@ -136,6 +136,7 @@ Example `config.json`:
 
 - [ ] Offer to install PHP, Composer, and Laravel installer via Laravel's `php.new` command
 - [ ] Support for `composer create-project` as an alternative to the Laravel installer
+- [ ] Support for development-only packages for php and js packages
 - [ ] Package manager alternatives (yarn, pnpm)
 - [ ] Additional starter kit templates
 - [ ] Make Dark Mode optional
