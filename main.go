@@ -15,15 +15,6 @@ var stubs embed.FS
 //go:embed config.json
 var configDotJson embed.FS
 
-type AuthConfig struct {
-	HTTPBasic map[string]HTTPBasicCredentials `json:"http-basic"`
-}
-
-type HTTPBasicCredentials struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
 type Options struct {
 	PHP     PackageOptions `json:"php"`
 	JS      PackageOptions `json:"js"`

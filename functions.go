@@ -18,7 +18,7 @@ func run(cname string, cargs ...string) error {
 }
 
 func check(cname string) error {
-	if err := exec.Command("which", "npm").Run(); err != nil {
+	if err := exec.Command("which", cname).Run(); err != nil {
 		return fmt.Errorf("%s is not installed", cname)
 	}
 

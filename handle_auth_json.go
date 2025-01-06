@@ -11,6 +11,15 @@ import (
 	"github.com/charmbracelet/huh"
 )
 
+type AuthConfig struct {
+	HTTPBasic map[string]HTTPBasicCredentials `json:"http-basic"`
+}
+
+type HTTPBasicCredentials struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
 func handleAuthJSON(p *project) error {
 	if !slices.Contains(p.opts.PHP.Prod, "livewire/flux-pro") {
 		fmt.Println("Skipping auth.json creation - Flux UI Pro is not in the project dependencies.")
