@@ -1,14 +1,10 @@
 {
     "php": {
-        "manager": "composer",
-        "dev-flag": "--dev",
         "prod": ["laravel/folio", "livewire/livewire", "livewire/volt", "livewire/flux", "livewire/flux-pro"],
         "dev": [],
         "remove": []
     },
     "js": {
-        "manager": "npm",
-        "dev-flag": "-D",
         "prod": [],
         "dev": ["prettier", "prettier-plugin-blade", "@tailwindcss/typography"],
         "remove": []

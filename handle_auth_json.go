@@ -11,8 +11,8 @@ import (
 	"github.com/charmbracelet/huh"
 )
 
-func handleAuthJSON(cfg *config) error {
-	if !slices.Contains(cfg.opts.PHP.Prod, "livewire/flux-pro") {
+func handleAuthJSON(p *project) error {
+	if !slices.Contains(p.opts.PHP.Prod, "livewire/flux-pro") {
 		fmt.Println("Skipping auth.json creation - Flux UI Pro is not in the project dependencies.")
 		return nil
 	}
@@ -34,7 +34,7 @@ func handleAuthJSON(cfg *config) error {
 		},
 	}
 
-	path := filepath.Join(cfg.projectDir, "auth.json")
+	path := filepath.Join(p.dir, "auth.json")
 
 	file, err := json.MarshalIndent(authConfig, "", "    ")
 	if err != nil {

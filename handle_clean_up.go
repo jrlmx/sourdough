@@ -7,20 +7,20 @@ import (
 	"strings"
 )
 
-func handleCleanUp(cfg *config) error {
-	err := cleanUpFiles(cfg.projectDir, cfg.opts.Files)
+func handleCleanUp(p *project) error {
+	err := cleanUpFiles(p.dir, p.opts.Files)
 
 	if err != nil {
 		return err
 	}
 
-	err = cleanComposerPackages(cfg.opts.PHP.Remove)
+	err = cleanComposerPackages(p.opts.PHP.Remove)
 
 	if err != nil {
 		return err
 	}
 
-	err = cleanJSPackages(cfg.opts.JS.Remove)
+	err = cleanJSPackages(p.opts.JS.Remove)
 
 	if err != nil {
 		return err
@@ -37,7 +37,7 @@ func cleanJSPackages(packages []string) error {
 
 	fmt.Println("Cleaning up unwanted node packages...")
 
-	if err := runCommand("npm", append([]string{"remove"}, packages...)...); err != nil {
+	if err := run("npm", append([]string{"remove"}, packages...)...); err != nil {
 		return fmt.Errorf("failed to remove node packages: %w", err)
 	}
 
@@ -52,7 +52,7 @@ func cleanComposerPackages(packages []string) error {
 
 	fmt.Println("Cleaning up unwanted composer packages...")
 
-	if err := runCommand("composer", append([]string{"remove"}, packages...)...); err != nil {
+	if err := run("composer", append([]string{"remove"}, packages...)...); err != nil {
 		return fmt.Errorf("failed to remove composer packages: %w", err)
 	}
 

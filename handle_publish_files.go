@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 )
 
-func handlePublishFiles(cfg *config) error {
-	err := os.MkdirAll(cfg.projectDir, os.ModePerm)
+func handlePublishFiles(p *project) error {
+	err := os.MkdirAll(p.dir, os.ModePerm)
 
 	if err != nil {
 		return fmt.Errorf("failed to create desination directory: %w", err)
@@ -32,15 +32,13 @@ func handlePublishFiles(cfg *config) error {
 		if err != nil {
 			return fmt.Errorf("failed to determine relative path: %w", err)
 		}
-		destPath := filepath.Join(cfg.projectDir, relPath)
+		destPath := filepath.Join(p.dir, relPath)
 
-		err = os.MkdirAll(filepath.Dir(destPath), os.ModePerm)
-		if err != nil {
+		if err := os.MkdirAll(filepath.Dir(destPath), os.ModePerm); err != nil {
 			return fmt.Errorf("failed to create directory for %s: %w", destPath, err)
 		}
 
-		err = os.WriteFile(destPath, content, os.ModePerm)
-		if err != nil {
+		if err := os.WriteFile(destPath, content, os.ModePerm); err != nil {
 			return fmt.Errorf("failed to write file %s: %w", destPath, err)
 		}
 

@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-func handleGitignore(cfg *config) error {
-	path := filepath.Join(cfg.projectDir, ".gitignore")
+func handleGitignore(p *project) error {
+	path := filepath.Join(p.dir, ".gitignore")
 
 	content, err := os.ReadFile(path)
 	if err != nil {
