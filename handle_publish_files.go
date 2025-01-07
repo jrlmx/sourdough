@@ -9,9 +9,9 @@ import (
 
 func handlePublishFiles(p *project) error {
 	dir := filepath.Join(".")
-	stubs := filepath.Join("kits", *p.kit, "stubs")
+	stubs := filepath.Join("starters", *p.kit, "stubs")
 
-	err := fs.WalkDir(kits, stubs, func(path string, d fs.DirEntry, err error) error {
+	err := fs.WalkDir(starters, stubs, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return fmt.Errorf("error walking directory %s: %w", path, err)
 		}
@@ -20,7 +20,7 @@ func handlePublishFiles(p *project) error {
 			return nil
 		}
 
-		content, err := kits.ReadFile(path)
+		content, err := starters.ReadFile(path)
 		if err != nil {
 			return fmt.Errorf("failed to read embedded file %s: %w", path, err)
 		}

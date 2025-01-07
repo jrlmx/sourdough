@@ -7,8 +7,8 @@ import (
 	"os"
 )
 
-//go:embed kits/*
-var kits embed.FS
+//go:embed starters/*
+var starters embed.FS
 
 func main() {
 	var name string
@@ -34,7 +34,7 @@ func main() {
 	for _, action := range actions() {
 		if err := action(&p); err != nil {
 			cleanupOnFailure(&p)
-			log.Fatal("failed to apply starter kit\n", err)
+			log.Fatal("failed to apply starter starter\n", err)
 		}
 	}
 

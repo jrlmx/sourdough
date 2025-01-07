@@ -8,7 +8,7 @@ import (
 )
 
 func handleKitSelection(p *project) error {
-	opts, err := availableKits()
+	opts, err := availableStarters()
 
 	if err != nil {
 		return err
@@ -34,9 +34,9 @@ func handleKitSelection(p *project) error {
 	return nil
 }
 
-func availableKits() ([]string, error) {
+func availableStarters() ([]string, error) {
 	opts := []string{}
-	files, err := kits.ReadDir("kits")
+	files, err := starters.ReadDir("starters")
 	if err != nil {
 		return []string{}, fmt.Errorf("error reading embedded directory: %w", err)
 	}
