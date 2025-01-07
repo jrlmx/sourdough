@@ -1,0 +1,24 @@
+{
+    "php": {
+        "prod": ["inertiajs/inertia-laravel"],
+        "dev": [],
+        "remove": []
+    },
+    "js": {
+        "prod": [],
+        "dev": [
+            "prettier",
+            "prettier-plugin-blade",
+            "prettier-plugin-svelte",
+            "prettier-plugin-tailwindcss",
+            "@inertiajs/svelte",
+            "svelte@latest",
+            "@sveltejs/vite-plugin-svelte",
+            "@tailwindcss/forms",
+            "@tailwindcss/typography"
+        ],
+        "remove": []
+    },
+    "artisan": ["inertia:middleware"],
+    "remove_files": ["resources/views/welcome.blade.php"]
+}

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"regexp"
+	"strings"
 )
 
 func run(cname string, cargs ...string) error {
@@ -23,4 +25,15 @@ func check(cname string) error {
 	}
 
 	return nil
+}
+
+func cleanString(s string) string {
+	s = strings.TrimSpace(s)
+
+	if s != "" {
+		re := regexp.MustCompile(`[<>:"/\|?*]`)
+		s = re.ReplaceAllString(s, "_")
+	}
+
+	return s
 }

@@ -4,23 +4,22 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 func handleCleanUp(p *project) error {
-	err := cleanUpFiles(p.dir, p.opts.Files)
+	err := cleanUpFiles(p.config.Files)
 
 	if err != nil {
 		return err
 	}
 
-	err = cleanComposerPackages(p.opts.PHP.Remove)
+	err = cleanComposerPackages(p.config.PHP.Remove)
 
 	if err != nil {
 		return err
 	}
 
-	err = cleanJSPackages(p.opts.JS.Remove)
+	err = cleanJSPackages(p.config.JS.Remove)
 
 	if err != nil {
 		return err
@@ -59,7 +58,7 @@ func cleanComposerPackages(packages []string) error {
 	return nil
 }
 
-func cleanUpFiles(projectDir string, files []string) error {
+func cleanUpFiles(files []string) error {
 	if len(files) == 0 {
 		fmt.Println("No files to clean up.")
 		return nil
@@ -68,15 +67,7 @@ func cleanUpFiles(projectDir string, files []string) error {
 	fmt.Println("Cleaning up unwanted files...")
 
 	for _, file := range files {
-		cleanPath := filepath.Clean(projectDir + "/" + file)
-
-		if strings.Contains(cleanPath, "..") {
-			return fmt.Errorf("parent directory traversal is not allowed: %s", cleanPath)
-		}
-
-		if !strings.Contains(cleanPath, projectDir) {
-			return fmt.Errorf("file is not in project directory: %s", cleanPath)
-		}
+		cleanPath := filepath.Join(".", file)
 
 		err := os.Remove(cleanPath)
 

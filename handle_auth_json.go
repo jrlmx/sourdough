@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"slices"
 	"strings"
 
 	"github.com/charmbracelet/huh"
@@ -21,30 +20,39 @@ type HTTPBasicCredentials struct {
 }
 
 func handleAuthJSON(p *project) error {
-	if !slices.Contains(p.opts.PHP.Prod, "livewire/flux-pro") {
-		fmt.Println("Skipping auth.json creation - Flux UI Pro is not in the project dependencies.")
+	var repos []Repo
+
+	for _, repo := range p.config.Repos {
+		if repo.Auth {
+			repos = append(repos, repo)
+		}
+	}
+
+	if len(repos) < 1 {
+		fmt.Println("No repositories need authorization")
 		return nil
+	}
+
+	authConfig := AuthConfig{
+		HTTPBasic: map[string]HTTPBasicCredentials{},
+	}
+
+	for _, repo := range repos {
+		username, password, err := authPrompt(repo)
+
+		if err != nil {
+			return err
+		}
+
+		authConfig.HTTPBasic[repo.Name] = HTTPBasicCredentials{
+			Username: username,
+			Password: password,
+		}
 	}
 
 	fmt.Println("Creating auth.json...")
 
-	username, license, err := fluxPrompt()
-
-	if err != nil {
-		return err
-	}
-
-	authConfig := AuthConfig{
-		HTTPBasic: map[string]HTTPBasicCredentials{
-			"composer.fluxui.dev": {
-				Username: username,
-				Password: license,
-			},
-		},
-	}
-
-	path := filepath.Join(p.dir, "auth.json")
-
+	path := filepath.Join(".", "auth.json")
 	file, err := json.MarshalIndent(authConfig, "", "    ")
 	if err != nil {
 		return fmt.Errorf("failed to create auth.json: %w", err)
@@ -57,7 +65,7 @@ func handleAuthJSON(p *project) error {
 	return nil
 }
 
-func fluxPrompt() (string, string, error) {
+func authPrompt(repo Repo) (string, string, error) {
 	var (
 		username string
 		password string
@@ -65,13 +73,13 @@ func fluxPrompt() (string, string, error) {
 
 	form := huh.NewForm(
 		huh.NewGroup(
-			huh.NewInput().Title("Enter your FLux UI Username").EchoMode(huh.EchoModePassword).Value(&username),
-			huh.NewInput().Title("Enter your Flux Licence Key").EchoMode(huh.EchoModePassword).Value(&password),
-		),
+			huh.NewInput().Title(fmt.Sprintf("Enter your %s Username", repo.Name)).EchoMode(huh.EchoModePassword).Value(&username),
+			huh.NewInput().Title(fmt.Sprintf("Enter your %s Password", repo.Name)).EchoMode(huh.EchoModePassword).Value(&password),
+		).Title("Enter your " + repo.Name + " credentials"),
 	)
 
 	if err := form.Run(); err != nil {
-		return "", "", fmt.Errorf("failed receiving flux credentials: %w", err)
+		return "", "", fmt.Errorf("failed receiving %s credentials: %w", repo.Name, err)
 	}
 
 	return strings.TrimSpace(username), strings.TrimSpace(password), nil

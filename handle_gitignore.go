@@ -8,7 +8,7 @@ import (
 )
 
 func handleGitignore(p *project) error {
-	path := filepath.Join(p.dir, ".gitignore")
+	path := filepath.Join(".", ".gitignore")
 
 	content, err := os.ReadFile(path)
 	if err != nil {

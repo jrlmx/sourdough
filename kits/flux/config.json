@@ -9,6 +9,13 @@
         "dev": ["prettier", "prettier-plugin-blade", "@tailwindcss/typography"],
         "remove": []
     },
+    "repos": [
+        {
+            "name": "flux-pro",
+            "url": "composer.fluxui.dev",
+            "auth": true
+        }
+    ],
     "artisan": ["folio:install", "volt:install"],
-    "files": { "remove": ["resources/views/welcome.blade.php"] }
+    "remove_files": ["resources/views/welcome.blade.php"]
 }

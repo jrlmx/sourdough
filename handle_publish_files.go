@@ -8,31 +8,28 @@ import (
 )
 
 func handlePublishFiles(p *project) error {
-	err := os.MkdirAll(p.dir, os.ModePerm)
+	dir := filepath.Join(".")
+	stubs := filepath.Join("kits", *p.kit, "stubs")
 
-	if err != nil {
-		return fmt.Errorf("failed to create desination directory: %w", err)
-	}
-
-	err = fs.WalkDir(stubs, "stubs", func(path string, d fs.DirEntry, err error) error {
+	err := fs.WalkDir(kits, stubs, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
-			return fmt.Errorf("error walking directory: %w", err)
+			return fmt.Errorf("error walking directory %s: %w", path, err)
 		}
 
 		if d.IsDir() {
 			return nil
 		}
 
-		content, err := stubs.ReadFile(path)
+		content, err := kits.ReadFile(path)
 		if err != nil {
 			return fmt.Errorf("failed to read embedded file %s: %w", path, err)
 		}
 
-		relPath, err := filepath.Rel("stubs", path)
+		relPath, err := filepath.Rel(stubs, path)
 		if err != nil {
 			return fmt.Errorf("failed to determine relative path: %w", err)
 		}
-		destPath := filepath.Join(p.dir, relPath)
+		destPath := filepath.Join(dir, relPath)
 
 		if err := os.MkdirAll(filepath.Dir(destPath), os.ModePerm); err != nil {
 			return fmt.Errorf("failed to create directory for %s: %w", destPath, err)

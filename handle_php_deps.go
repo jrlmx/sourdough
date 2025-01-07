@@ -7,23 +7,25 @@ import (
 func handlePHPDeps(p *project) error {
 	fmt.Println("Installing composer dependencies...")
 
-	if err := run("composer", "config", "repositories.flux-pro", "composer", "https://composer.fluxui.dev"); err != nil {
-		return fmt.Errorf("failed to add flux ui repository: %w", err)
+	for _, repo := range p.config.Repos {
+		if err := run("composer", "config", "repositories."+repo.Name, "composer", "https://"+repo.Url); err != nil {
+			return fmt.Errorf("failed to add flux ui repository: %w", err)
+		}
 	}
 
-	prod := p.opts.PHP.Prod
+	prod := p.config.PHP.Prod
 
 	if err := run("composer", append([]string{"require"}, prod...)...); err != nil {
 		return fmt.Errorf("failed to install composer dependencies: %w", err)
 	}
 
-	dev := p.opts.PHP.Dev
+	dev := p.config.PHP.Dev
 
 	if err := run("composer", append([]string{"require", "--dev"}, dev...)...); err != nil {
 		return fmt.Errorf("failed to install composer dependencies: %w", err)
 	}
 
-	artisanCmds := p.opts.Artisan
+	artisanCmds := p.config.Artisan
 
 	for _, cmd := range artisanCmds {
 		if err := run("php", append([]string{"artisan"}, cmd)...); err != nil {

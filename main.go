@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
 )
 
 //go:embed kits/*
@@ -15,7 +14,8 @@ var kits embed.FS
 type Config struct {
 	PHP     PackageManifest `json:"php"`
 	JS      PackageManifest `json:"js"`
-	Files   []string        `json:"files.remove"`
+	Files   []string        `json:"remove_files"`
+	Repos   []Repo          `json:"repos"`
 	Artisan []string        `json:"artisan"`
 }
 
@@ -25,28 +25,28 @@ type PackageManifest struct {
 	Dev    []string `json:"dev"`
 }
 
+type Repo struct {
+	Name string `json:"name"`
+	Url  string `json:"url"`
+	Auth bool   `json:"auth"`
+}
+
 type project struct {
 	name   string
-	dir    string
 	kit    *string
 	config *Config
 }
 
-func newProject(name, dir string) project {
+func newProject(name string) project {
 	return project{
 		name,
-		dir,
 		nil,
 		nil,
 	}
 }
 
-func (p *project) kitPath() string {
-	return filepath.Clean(*p.kit + "/")
-}
-
 func (p *project) loadConfig() error {
-	data, err := kits.ReadFile(p.kitPath() + "config.json")
+	data, err := kits.ReadFile("kits/" + *p.kit + "/config.json")
 	if err != nil {
 		return err
 	}
@@ -65,23 +65,15 @@ func main() {
 		log.Fatal("usage: program <project-name>")
 	}
 
-	wd, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	name := os.Args[1]
-	dir := filepath.Join(wd, name)
 
 	if _, err := os.Stat(name); err == nil {
-		log.Fatalf("directory already exists: %s", dir)
+		log.Fatalf("project directory already exists: %s", name)
 	}
 
-	p := newProject(name, dir)
+	cleaned := cleanString(name)
 
-	if err := p.loadConfig(); err != nil {
-		log.Fatal(err)
-	}
+	p := newProject(cleaned)
 
 	if err := checkDependencies(); err != nil {
 		log.Fatal(err)
@@ -100,7 +92,7 @@ func main() {
 func actions() []func(p *project) error {
 	return []func(p *project) error{
 		handleCreateProject,
-		// handleKitSelection,
+		handleKitSelection,
 		handleAuthJSON,
 		handleCleanUp,
 		handleGitignore,
