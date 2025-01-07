@@ -40,7 +40,7 @@ func newProject(name string) project {
 }
 
 func (p *project) loadConfig() error {
-	data, err := kits.ReadFile("kits/" + *p.kit + "/config.json")
+	data, err := starters.ReadFile("starters/" + *p.kit + "/config.json")
 	if err != nil {
 		return err
 	}

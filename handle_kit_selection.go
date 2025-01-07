@@ -7,7 +7,7 @@ import (
 	"github.com/charmbracelet/huh"
 )
 
-func handleKitSelection(p *project) error {
+func handleStarterSelection(p *project) error {
 	opts, err := availableStarters()
 
 	if err != nil {
@@ -48,7 +48,7 @@ func availableStarters() ([]string, error) {
 	}
 
 	if len(opts) < 1 {
-		return []string{}, errors.New("no starter kits found")
+		return []string{}, errors.New("no starters found")
 	}
 
 	return opts, nil

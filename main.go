@@ -44,7 +44,7 @@ func main() {
 func actions() []func(p *project) error {
 	return []func(p *project) error{
 		handleCreateProject,
-		handleKitSelection,
+		handleStarterSelection,
 		handleAuthJSON,
 		handleCleanUp,
 		handleGitignore,
