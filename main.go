@@ -120,9 +120,11 @@ func checkDependencies() error {
 	}
 
 	for _, dep := range deps {
-		if err := check(dep); err != nil {
+		path, err := check(dep)
+		if err != nil {
 			return err
 		}
+		fmt.Printf("Using %s: %s", dep, path)
 	}
 
 	return nil

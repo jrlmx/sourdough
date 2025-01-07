@@ -24,8 +24,8 @@ func handleGitignore(p *project) error {
 	if err != nil {
 		return fmt.Errorf("failed to open .gitignore: %w", err)
 	}
-	defer file.Close()
 
+	defer file.Close()
 	if _, err := file.WriteString("\nauth.json\n"); err != nil {
 		return fmt.Errorf("failed to update .gitignore: %w", err)
 	}

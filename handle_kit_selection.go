@@ -28,7 +28,6 @@ func handleKitSelection(p *project) error {
 	if err := form.Run(); err != nil {
 		return fmt.Errorf("starter kit selection failed: %w", err)
 	}
-
 	p.kit = &kit
 	p.loadConfig()
 
@@ -36,23 +35,21 @@ func handleKitSelection(p *project) error {
 }
 
 func availableKits() ([]string, error) {
-	k := []string{}
-
+	opts := []string{}
 	files, err := kits.ReadDir("kits")
-
 	if err != nil {
 		return []string{}, fmt.Errorf("error reading embedded directory: %w", err)
 	}
 
 	for _, file := range files {
 		if file.IsDir() {
-			k = append(k, file.Name())
+			opts = append(opts, file.Name())
 		}
 	}
 
-	if len(k) < 1 {
+	if len(opts) < 1 {
 		return []string{}, errors.New("no starter kits found")
 	}
 
-	return k, nil
+	return opts, nil
 }

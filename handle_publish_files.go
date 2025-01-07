@@ -29,8 +29,8 @@ func handlePublishFiles(p *project) error {
 		if err != nil {
 			return fmt.Errorf("failed to determine relative path: %w", err)
 		}
-		destPath := filepath.Join(dir, relPath)
 
+		destPath := filepath.Join(dir, relPath)
 		if err := os.MkdirAll(filepath.Dir(destPath), os.ModePerm); err != nil {
 			return fmt.Errorf("failed to create directory for %s: %w", destPath, err)
 		}

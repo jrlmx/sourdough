@@ -8,19 +8,16 @@ import (
 
 func handleCleanUp(p *project) error {
 	err := cleanUpFiles(p.config.Files)
-
 	if err != nil {
 		return err
 	}
 
 	err = cleanComposerPackages(p.config.PHP.Remove)
-
 	if err != nil {
 		return err
 	}
 
 	err = cleanJSPackages(p.config.JS.Remove)
-
 	if err != nil {
 		return err
 	}
@@ -35,7 +32,6 @@ func cleanJSPackages(packages []string) error {
 	}
 
 	fmt.Println("Cleaning up unwanted node packages...")
-
 	if err := run("npm", append([]string{"remove"}, packages...)...); err != nil {
 		return fmt.Errorf("failed to remove node packages: %w", err)
 	}
@@ -50,7 +46,6 @@ func cleanComposerPackages(packages []string) error {
 	}
 
 	fmt.Println("Cleaning up unwanted composer packages...")
-
 	if err := run("composer", append([]string{"remove"}, packages...)...); err != nil {
 		return fmt.Errorf("failed to remove composer packages: %w", err)
 	}
@@ -70,7 +65,6 @@ func cleanUpFiles(files []string) error {
 		cleanPath := filepath.Join(".", file)
 
 		err := os.Remove(cleanPath)
-
 		if err != nil {
 			return err
 		}

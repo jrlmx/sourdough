@@ -19,12 +19,13 @@ func run(cname string, cargs ...string) error {
 	return nil
 }
 
-func check(cname string) error {
-	if err := exec.Command("which", cname).Run(); err != nil {
-		return fmt.Errorf("%s is not installed", cname)
+func check(cname string) (string, error) {
+	path, err := exec.LookPath(cname)
+	if err != nil {
+		return "", fmt.Errorf("%s is not installed", cname)
 	}
 
-	return nil
+	return path, nil
 }
 
 func cleanString(s string) string {
