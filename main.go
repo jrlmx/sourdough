@@ -9,29 +9,55 @@ import (
 	"path/filepath"
 )
 
-//go:embed stubs/*
-var stubs embed.FS
+//go:embed kits/*
+var kits embed.FS
 
-//go:embed config.json
-var configDotJson embed.FS
-
-type Options struct {
-	PHP     PackageOptions `json:"php"`
-	JS      PackageOptions `json:"js"`
-	Files   []string       `json:"files.remove"`
-	Artisan []string       `json:"artisan"`
+type Config struct {
+	PHP     PackageManifest `json:"php"`
+	JS      PackageManifest `json:"js"`
+	Files   []string        `json:"files.remove"`
+	Artisan []string        `json:"artisan"`
 }
 
-type PackageOptions struct {
+type PackageManifest struct {
+	Remove []string `json:"remove"`
 	Prod   []string `json:"prod"`
 	Dev    []string `json:"dev"`
-	Remove []string `json:"remove"`
 }
 
 type project struct {
-	name string
-	dir  string
-	opts Options
+	name   string
+	dir    string
+	kit    *string
+	config *Config
+}
+
+func newProject(name, dir string) project {
+	return project{
+		name,
+		dir,
+		nil,
+		nil,
+	}
+}
+
+func (p *project) kitPath() string {
+	return filepath.Clean(*p.kit + "/")
+}
+
+func (p *project) loadConfig() error {
+	data, err := kits.ReadFile(p.kitPath() + "config.json")
+	if err != nil {
+		return err
+	}
+
+	var cfg Config
+	if err := json.Unmarshal(data, &cfg); err != nil {
+		return fmt.Errorf("error parsing config.json: %w", err)
+	}
+
+	p.config = &cfg
+	return nil
 }
 
 func main() {
@@ -40,7 +66,6 @@ func main() {
 	}
 
 	wd, err := os.Getwd()
-
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -52,16 +77,10 @@ func main() {
 		log.Fatalf("directory already exists: %s", dir)
 	}
 
-	opts, err := getConfigDotJson()
+	p := newProject(name, dir)
 
-	if err != nil {
+	if err := p.loadConfig(); err != nil {
 		log.Fatal(err)
-	}
-
-	p := project{
-		name,
-		dir,
-		opts,
 	}
 
 	if err := checkDependencies(); err != nil {
@@ -81,6 +100,7 @@ func main() {
 func actions() []func(p *project) error {
 	return []func(p *project) error{
 		handleCreateProject,
+		// handleKitSelection,
 		handleAuthJSON,
 		handleCleanUp,
 		handleGitignore,
@@ -97,22 +117,6 @@ func cleanupOnFailure(p *project) error {
 		}
 	}
 	return nil
-}
-
-func getConfigDotJson() (Options, error) {
-	data, err := configDotJson.ReadFile("config.json")
-
-	if err != nil {
-		return Options{}, fmt.Errorf("error reading embedded file: %w", err)
-	}
-
-	var p Options
-
-	if err := json.Unmarshal(data, &p); err != nil {
-		return Options{}, fmt.Errorf("error unmarshaling JSON: %v", err)
-	}
-
-	return p, nil
 }
 
 func checkDependencies() error {
