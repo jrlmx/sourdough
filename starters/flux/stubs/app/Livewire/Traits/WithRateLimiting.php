@@ -7,16 +7,23 @@ use Illuminate\Support\Facades\RateLimiter;
 
 trait WithRateLimiting
 {
-    protected function throttle(string $key, int $limit, callable $callback): void
+    protected function getThrottleKey(): string
     {
-        if (! RateLimiter::tooManyAttempts($key, $limit)) {
-            RateLimiter::hit($key);
+        return request()->ip();
+    }
+
+    protected function throttle(int $limit, callable $callback): void
+    {
+        $throttleKey = $this->getThrottleKey();
+
+        if (! RateLimiter::tooManyAttempts($throttleKey, $limit)) {
+            RateLimiter::hit($throttleKey);
 
             return;
         }
 
         event(new Lockout(request()));
 
-        $callback(RateLimiter::availableIn($key));
+        $callback(RateLimiter::availableIn($throttleKey));
     }
 }

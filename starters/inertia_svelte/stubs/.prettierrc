@@ -7,8 +7,11 @@
     "semi": false,
     "singleQuote": true,
     "plugins": [
-        "prettier-plugin-blade"
+        "prettier-plugin-blade",
+        "prettier-plugin-svelte",
+        "prettier-plugin-tailwindcss"
     ],
+    "tailwindStylesheet": "./resources/css/app.css",
     "overrides": [
         {
             "files": [
@@ -16,6 +19,14 @@
             ],
             "options": {
                 "parser": "blade"
+            }
+        },
+        {
+            "files": [
+                "*.svelte"
+            ],
+            "options": {
+                "parser": "svelte"
             }
         }
     ]

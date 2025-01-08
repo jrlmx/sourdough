@@ -9,7 +9,6 @@
 
         <flux:navbar class="-mb-px max-lg:hidden">
             <flux:navbar.item icon="home" href="{{ route('dashboard', absolute: false) }}">Dashboard</flux:navbar.item>
-            <flux:navbar.item icon="user" href="{{ route('characters', absolute: false) }}">Characters</flux:navbar.item>
         </flux:navbar>
 
         <flux:spacer />
@@ -39,7 +38,6 @@
 
         <flux:navlist variant="outline">
             <flux:navlist.item icon="home" href="{{ route('dashboard', absolute: false) }}">Dashboard</flux:navlist.item>
-            <flux:navlist.item icon="user" href="{{ route('characters', absolute: false) }}">Characters</flux:navlist.item>
         </flux:navlist>
     </flux:sidebar>
 

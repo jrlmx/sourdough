@@ -11,8 +11,8 @@
             "prettier-plugin-blade",
             "prettier-plugin-svelte",
             "prettier-plugin-tailwindcss",
-            "@inertiajs/svelte",
             "svelte@latest",
+            "@inertiajs/svelte",
             "@sveltejs/vite-plugin-svelte",
             "@tailwindcss/forms",
             "@tailwindcss/typography"
