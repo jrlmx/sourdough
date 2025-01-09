@@ -1,7 +1,7 @@
 {
     "php": {
         "prod": ["laravel/folio", "livewire/livewire", "livewire/volt", "livewire/flux", "livewire/flux-pro"],
-        "dev": [],
+        "dev": ["wire-elements/wire-spy"],
         "remove": []
     },
     "js": {
