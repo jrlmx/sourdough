@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-//go:embed starters/*
+//go:embed all:starters/*
 var starters embed.FS
 
 func main() {

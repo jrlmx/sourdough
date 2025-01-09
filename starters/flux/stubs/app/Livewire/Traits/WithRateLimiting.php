@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\RateLimiter;
 
 trait WithRateLimiting
 {
-    protected function getThrottleKey(): string
+    protected function throttleKey(): string
     {
         return request()->ip();
     }
