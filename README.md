@@ -88,12 +88,12 @@ starters/
 
 ## Planned Features
 
-[x] Support multiple "starters" (read: starter-kits)
-[x] Handle multiple private repos and auth.json crendentials
-[ ] Support commandline args for selecting a specific "starter"
-[ ] Allow the injection of code snippets into a specifically targeted file, clossure, or array
+- [x] Support multiple "starters" (read: starter-kits)
+- [x] Handle multiple private repos and auth.json credentials
+- [ ] Support commandline args for selecting a specific "starter"
+- [ ] Allow the injection of code snippets into a specifically targeted file, closure, or array
 
-[ ] ~~Add a Svelte-Inertia starter~~ (cancelled - for now)
+- [ ] ~~Add a Svelte-Inertia starter~~ (cancelled - for now)
 
 ## FAQ
 
