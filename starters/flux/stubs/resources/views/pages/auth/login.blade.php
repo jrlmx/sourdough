@@ -8,6 +8,7 @@ use function Laravel\Folio\name;
 use function Livewire\Volt\rules;
 use function Livewire\Volt\state;
 use function Livewire\Volt\uses;
+use function Livewire\Volt\protect;
 
 name('login');
 middleware('guest');
@@ -26,15 +27,17 @@ rules([
     'remember' => 'boolean',
 ]);
 
-$login = function () {
-    $this->validate();
-
-    $throttleKey = str($this->email)
+$throttleKey = protect(function () {
+    return str($this->email)
         ->lower()
         ->append('|'.request()->ip)
         ->transliterate();
+});
 
-    $this->throttle($throttleKey, 5, function ($seconds) {
+$login = function () {
+    $this->validate();
+
+    $this->throttle($this->throttleKey(), 5, function ($seconds) {
         throw ValidationException::withMessages([
             'email' => trans('auth.throttle', [
                 'seconds' => $seconds,
