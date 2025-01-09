@@ -1,5 +1,5 @@
 # Sourdough
-## A Customizable Laravel Project Starter Kit
+## A Customizable Laravel Installer/Starter Kit
 
 > [!WARNING]
 > This was created primarily for personal use - I won't necessarily make changes based on your feedback.
