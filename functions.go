@@ -16,9 +16,11 @@ const (
 	InteractiveMode
 )
 
+var execCommand = exec.Command
+
 func runCommand(cname string, mode runMode, cargs ...string) error {
-	cmd := exec.Command(cname, cargs...)
-	if mode == NormalMode {
+	cmd := execCommand(cname, cargs...)
+	if mode != QuietMode {
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 	}
