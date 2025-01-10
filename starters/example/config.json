@@ -1,0 +1,16 @@
+{
+    "php": {
+        "prod": [],
+        "dev": [],
+        "remove": []
+    },
+    "js": {
+        "prod": [],
+        "dev": [],
+        "remove": []
+    },
+    "repos": [],
+    "artisan": [],
+    "npx": [],
+    "remove_files": []
+}

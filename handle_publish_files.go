@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io/fs"
 	"os"
@@ -11,11 +12,16 @@ func handlePublishFiles(p *project) error {
 	dir := filepath.Join(".")
 	stubs := filepath.Join("starters", *p.kit, "stubs")
 
-	existsAndNotEmpty, err := existsAndNotEmpty(stubs)
+	entries, err := fs.ReadDir(starters, stubs)
 	if err != nil {
-		return fmt.Errorf("error checking directory: %w", err)
+		if errors.Is(err, fs.ErrNotExist) {
+			fmt.Println("No files to copy.")
+			return nil
+		}
+		return fmt.Errorf("error checking stubs directory: %w", err)
 	}
-	if !existsAndNotEmpty {
+	if len(entries) == 0 {
+		fmt.Println("No files to copy.")
 		return nil
 	}
 
