@@ -7,17 +7,17 @@ import (
 )
 
 func handleCleanUp(p *project) error {
-	err := cleanUpFiles(p.config.Files)
+	err := removeFiles(p.config.Files)
 	if err != nil {
 		return err
 	}
 
-	err = cleanComposerPackages(p.config.PHP.Remove)
+	err = removePHPPackages(p.config.PHP.Remove)
 	if err != nil {
 		return err
 	}
 
-	err = cleanJSPackages(p.config.JS.Remove)
+	err = removeJSPackages(p.config.JS.Remove)
 	if err != nil {
 		return err
 	}
@@ -25,7 +25,7 @@ func handleCleanUp(p *project) error {
 	return nil
 }
 
-func cleanJSPackages(packages []string) error {
+func removeJSPackages(packages []string) error {
 	if len(packages) == 0 {
 		fmt.Println("No JS packages to clean up.")
 		return nil
@@ -39,7 +39,7 @@ func cleanJSPackages(packages []string) error {
 	return nil
 }
 
-func cleanComposerPackages(packages []string) error {
+func removePHPPackages(packages []string) error {
 	if len(packages) == 0 {
 		fmt.Println("No PHP packages to clean up.")
 		return nil
@@ -53,7 +53,7 @@ func cleanComposerPackages(packages []string) error {
 	return nil
 }
 
-func cleanUpFiles(files []string) error {
+func removeFiles(files []string) error {
 	if len(files) == 0 {
 		fmt.Println("No files to clean up.")
 		return nil
