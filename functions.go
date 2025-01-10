@@ -38,3 +38,23 @@ func cleanString(s string) string {
 
 	return s
 }
+
+func existsAndNotEmpty(dir string) (bool, error) {
+	info, err := os.Stat(dir)
+	if os.IsNotExist(err) {
+		return false, nil
+	} else if err != nil {
+		return false, err
+	}
+
+	if !info.IsDir() {
+		return false, fmt.Errorf("%s is not a directory", dir)
+	}
+
+	contents, err := os.ReadDir(dir)
+	if err != nil {
+		return false, err
+	}
+
+	return len(contents) > 0, nil
+}

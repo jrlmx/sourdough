@@ -64,7 +64,7 @@ func cleanUpFiles(files []string) error {
 	for _, file := range files {
 		cleanPath := filepath.Join(".", file)
 
-		err := os.Remove(cleanPath)
+		err := os.RemoveAll(cleanPath)
 		if err != nil {
 			return err
 		}

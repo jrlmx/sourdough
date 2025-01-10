@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 //go:embed all:starters/*
@@ -25,7 +26,14 @@ func main() {
 
 	cleaned := cleanString(name)
 
-	p := newProject(cleaned)
+	wdir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	pdir := filepath.Join(wdir, cleaned)
+
+	p := newProject(cleaned, pdir)
 
 	if err := checkDeps(); err != nil {
 		log.Fatal(err)
@@ -34,7 +42,7 @@ func main() {
 	for _, action := range actions() {
 		if err := action(&p); err != nil {
 			cleanupOnFailure(&p)
-			log.Fatal("failed to apply starter starter\n", err)
+			log.Fatal(err)
 		}
 	}
 
@@ -55,8 +63,9 @@ func actions() []func(p *project) error {
 }
 
 func cleanupOnFailure(p *project) error {
-	if _, err := os.Stat(p.name); err == nil {
-		if err := os.RemoveAll(p.name); err != nil {
+	fmt.Println("Cleaning up...")
+	if _, err := os.Stat(p.pdir); err == nil {
+		if err := os.RemoveAll(p.pdir); err != nil {
 			return fmt.Errorf("failed to cleanup directory: %w", err)
 		}
 	}

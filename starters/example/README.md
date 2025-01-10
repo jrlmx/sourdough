@@ -1,0 +1,3 @@
+# An Example Starter
+
+This is a demonstration of how you can use Sourdough: In this case I'm using the installer to extend an existing starter kit (Laravel Breeze) to suite my own personal preferences...

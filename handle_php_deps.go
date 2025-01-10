@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 )
 
 func handlePHPDeps(p *project) error {
@@ -28,7 +29,8 @@ func handlePHPDeps(p *project) error {
 
 	artisanCmds := p.config.Artisan
 	for _, cmd := range artisanCmds {
-		if err := run("php", append([]string{"artisan"}, cmd)...); err != nil {
+		parts := strings.Split(strings.TrimSpace(cmd), " ")
+		if err := run("php", append([]string{"artisan"}, parts...)...); err != nil {
 			return fmt.Errorf("failed to run %s: %v", cmd, err)
 		}
 	}

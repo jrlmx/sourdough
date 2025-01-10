@@ -27,13 +27,15 @@ type Repo struct {
 
 type project struct {
 	name   string
+	pdir   string
 	kit    *string
 	config *Config
 }
 
-func newProject(name string) project {
+func newProject(name, pdir string) project {
 	return project{
 		name,
+		pdir,
 		nil,
 		nil,
 	}

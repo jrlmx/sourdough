@@ -1,0 +1,16 @@
+{
+    "$schema": "../../config-schema.json",
+    "php": {
+        "prod": [],
+        "dev": ["laravel/breeze"],
+        "remove": []
+    },
+    "js": {
+        "prod": [],
+        "dev": [],
+        "remove": []
+    },
+    "artisan": ["breeze:install vue --pest --no-interaction"],
+    "repos": [],
+    "remove_files": []
+}

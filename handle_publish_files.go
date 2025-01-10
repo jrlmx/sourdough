@@ -11,7 +11,15 @@ func handlePublishFiles(p *project) error {
 	dir := filepath.Join(".")
 	stubs := filepath.Join("starters", *p.kit, "stubs")
 
-	err := fs.WalkDir(starters, stubs, func(path string, d fs.DirEntry, err error) error {
+	existsAndNotEmpty, err := existsAndNotEmpty(stubs)
+	if err != nil {
+		return fmt.Errorf("error checking directory: %w", err)
+	}
+	if !existsAndNotEmpty {
+		return nil
+	}
+
+	err = fs.WalkDir(starters, stubs, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return fmt.Errorf("error walking directory %s: %w", path, err)
 		}
