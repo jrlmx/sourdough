@@ -14,8 +14,8 @@ var starters embed.FS
 func main() {
 	var name string
 
-	if len(os.Args) != 2 {
-		log.Fatal("usage: program <project-name>")
+	if len(os.Args) < 2 {
+		log.Fatalf("Usage: %s [project_name]\n", os.Args[0])
 	}
 
 	name = os.Args[1]
@@ -35,7 +35,7 @@ func main() {
 
 	p := newProject(cleaned, pdir)
 
-	if err := checkDeps(); err != nil {
+	if err := checkSystemDeps(); err != nil {
 		log.Fatal(err)
 	}
 
@@ -72,7 +72,7 @@ func cleanupOnFailure(p *project) error {
 	return nil
 }
 
-func checkDeps() error {
+func checkSystemDeps() error {
 	deps := []string{
 		"php",
 		"laravel",

@@ -47,7 +47,7 @@ The default "flux" starter will install Livewire, Volt, Folio, Flux and Flux Pro
     "php": {
         "prod": ["laravel/folio", "livewire/livewire", "livewire/volt", "livewire/flux", "livewire/flux-pro"],
         "dev": ["wire-elements/wire-spy"],
-        "remove": []
+        "remove":[]
     },
     "js": {
         "prod": [],
@@ -62,6 +62,7 @@ The default "flux" starter will install Livewire, Volt, Folio, Flux and Flux Pro
         }
     ],
     "artisan": ["folio:install", "volt:install"],
+    "npx": [],
     "remove_files": ["resources/views/welcome.blade.php"]
 }
 ```

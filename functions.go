@@ -44,7 +44,7 @@ func runInteractive(cname string, cargs ...string) error {
 	return runCommand(cname, InteractiveMode, cargs...)
 }
 
-func check(cname string) (string, error) {
+func isInstalled(cname string) (string, error) {
 	path, err := exec.LookPath(cname)
 	if err != nil {
 		return "", fmt.Errorf("%s is not installed", cname)
