@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\Rules;
 
@@ -32,7 +33,7 @@ $resetPassword = function (): void {
     $status = Password::reset($this->only('email', 'password', 'password_confirmation', 'token'), function ($user, $password) {
         $user
             ->forceFill([
-                'password' => $password,
+                'password' => Hash::make($password),
                 'remember_token' => Str::random(60),
             ])
             ->save();

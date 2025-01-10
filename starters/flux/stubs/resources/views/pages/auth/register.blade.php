@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
 use function Laravel\Folio\middleware;
@@ -29,7 +30,11 @@ rules([
 $register = function () {
     $this->validate();
 
-    $user = User::create($this->only('name', 'email', 'password'));
+    $user = User::create([
+        'name' => $this->name,
+        'email' => $this->email,
+        Hash::make($this->password),
+    ]);
 
     event(new Registered($user));
 
