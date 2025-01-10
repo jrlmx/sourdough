@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 use function Laravel\Folio\middleware;
@@ -28,7 +27,7 @@ $confirm = function (): void {
             ->guard('web')
             ->validate([
                 'email' => auth()->user()->email,
-                'password' => Hash::make($this->password),
+                'password' => $this->password,
             ])
     ) {
         throw ValidationException::withMessages([

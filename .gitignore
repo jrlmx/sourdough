@@ -16,4 +16,4 @@ cache/
 /.prettierrc
 
 sourdough
-test/
+/test/
