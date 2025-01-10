@@ -19,6 +19,25 @@ func run(cname string, cargs ...string) error {
 	return nil
 }
 
+func runQuietly(cname string, cargs ...string) error {
+	cmd := exec.Command(cname, cargs...)
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func runInteractive(cname string, cargs ...string) error {
+	cmd := exec.Command(cname, cargs...)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+	return nil
+}
+
 func check(cname string) (string, error) {
 	path, err := exec.LookPath(cname)
 	if err != nil {

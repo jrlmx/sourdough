@@ -85,7 +85,7 @@ func checkDeps() error {
 		if err != nil {
 			return err
 		}
-		fmt.Printf("Using %s: %s", dep, path)
+		fmt.Printf("Using %s: %s\n", dep, path)
 	}
 
 	return nil

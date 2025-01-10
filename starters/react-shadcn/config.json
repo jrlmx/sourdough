@@ -10,7 +10,8 @@
         "dev": [],
         "remove": []
     },
-    "artisan": ["breeze:install vue --pest --no-interaction"],
+    "artisan": ["breeze:install react --typescript --no-interaction"],
+    "npx": ["shadcn@latest init"],
     "repos": [],
     "remove_files": []
 }

@@ -32,7 +32,7 @@ func cleanJSPackages(packages []string) error {
 	}
 
 	fmt.Println("Cleaning up unwanted node packages...")
-	if err := run("npm", append([]string{"remove"}, packages...)...); err != nil {
+	if err := runQuietly("npm", append([]string{"remove"}, packages...)...); err != nil {
 		return fmt.Errorf("failed to remove node packages: %w", err)
 	}
 
@@ -46,7 +46,7 @@ func cleanComposerPackages(packages []string) error {
 	}
 
 	fmt.Println("Cleaning up unwanted composer packages...")
-	if err := run("composer", append([]string{"remove"}, packages...)...); err != nil {
+	if err := runQuietly("composer", append([]string{"remove"}, packages...)...); err != nil {
 		return fmt.Errorf("failed to remove composer packages: %w", err)
 	}
 

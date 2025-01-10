@@ -8,18 +8,18 @@ import (
 func handlePHPDeps(p *project) error {
 	fmt.Println("Installing composer dependencies...")
 	for _, repo := range p.config.Repos {
-		if err := run("composer", "config", "repositories."+repo.Name, "composer", "https://"+repo.Url); err != nil {
+		if err := runQuietly("composer", "config", "repositories."+repo.Name, "composer", "https://"+repo.Url); err != nil {
 			return fmt.Errorf("failed to add flux ui repository: %w", err)
 		}
 	}
 
 	prod := p.config.PHP.Prod
-	if err := run("composer", append([]string{"require", "--no-install"}, prod...)...); err != nil {
+	if err := runQuietly("composer", append([]string{"require", "--no-install"}, prod...)...); err != nil {
 		return fmt.Errorf("failed to add composer dependencies to composer.json (prod): %w", err)
 	}
 
 	dev := p.config.PHP.Dev
-	if err := run("composer", append([]string{"require", "--dev", "--no-install"}, dev...)...); err != nil {
+	if err := runQuietly("composer", append([]string{"require", "--dev", "--no-install"}, dev...)...); err != nil {
 		return fmt.Errorf("failed to add composer dependencies to composer.json (dev): %w", err)
 	}
 
@@ -30,7 +30,7 @@ func handlePHPDeps(p *project) error {
 	artisanCmds := p.config.Artisan
 	for _, cmd := range artisanCmds {
 		parts := strings.Split(strings.TrimSpace(cmd), " ")
-		if err := run("php", append([]string{"artisan"}, parts...)...); err != nil {
+		if err := runInteractive("php", append([]string{"artisan"}, parts...)...); err != nil {
 			return fmt.Errorf("failed to run %s: %v", cmd, err)
 		}
 	}

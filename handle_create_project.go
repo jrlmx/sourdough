@@ -7,7 +7,7 @@ import (
 
 func handleCreateProject(p *project) error {
 	fmt.Printf("Creating new Laravel project: %s\n", p.name)
-	if err := run("laravel", "new", p.name); err != nil {
+	if err := runQuietly("laravel", "new", p.name); err != nil {
 		return fmt.Errorf("failed to create Laravel project: %w", err)
 	}
 

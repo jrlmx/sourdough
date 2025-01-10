@@ -11,6 +11,7 @@ type Config struct {
 	Files   []string        `json:"remove_files"`
 	Repos   []Repo          `json:"repos"`
 	Artisan []string        `json:"artisan"`
+	NPX     []string        `json:"npx"`
 }
 
 type PackageManifest struct {
