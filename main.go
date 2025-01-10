@@ -81,7 +81,7 @@ func checkSystemDeps() error {
 	}
 
 	for _, dep := range deps {
-		path, err := check(dep)
+		path, err := isInstalled(dep)
 		if err != nil {
 			return err
 		}
