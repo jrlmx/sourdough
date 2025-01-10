@@ -33,7 +33,7 @@ $register = function () {
     $user = User::create([
         'name' => $this->name,
         'email' => $this->email,
-        Hash::make($this->password),
+        'password' => Hash::make($this->password),
     ]);
 
     event(new Registered($user));
