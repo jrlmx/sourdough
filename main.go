@@ -24,7 +24,7 @@ func main() {
 		log.Fatalf("project directory already exists: %s", name)
 	}
 
-	cleaned := cleanString(name)
+	cleaned := cleanDirName(name)
 
 	wdir, err := os.Getwd()
 	if err != nil {
