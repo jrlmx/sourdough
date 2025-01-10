@@ -28,7 +28,7 @@ $sendResetLink = function (): void {
 
     $this->reset('email');
 
-    session()->flash('status', __($status));
+    session()->flash('status', $status);
 };
 ?>
 

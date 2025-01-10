@@ -1,3 +1,16 @@
+<?php
+
+use App\Livewire\Actions\Logout;
+
+$logout = function (Logout $action) {
+    $action();
+
+    return redirect()->route('login');
+};
+
+?>
+
+
 @props(['app_title' => null, 'pg_title' => null])
 
 <x-layouts.base :$app_title :$pg_title>
@@ -13,21 +26,21 @@
 
         <flux:spacer />
 
-        <flux:dropdown position="top" align="start">
-            <flux:profile avatar="https://fluxui.dev/img/demo/user.png">
-                <x-slot:avatar>
-                    <x-user.avatar :text="auth()->user()->initials" />
-                </x-slot>
-            </flux:profile>
+        @volt('user.menu')
+            <flux:dropdown position="top" align="start">
+                <flux:profile avatar="https://fluxui.dev/img/demo/user.png">
+                    <x-slot:avatar>
+                        <x-user.avatar :text="auth()->user()->initials" />
+                    </x-slot>
+                </flux:profile>
 
-            <flux:menu>
-                <flux:menu.item icon="user" href="{{ route('profile') }}">
-                    {{ __('Profile') }}
-                </flux:menu.item>
-                <flux:menu.separator />
-                <livewire:auth.logout icon="arrow-right-start-on-rectangle" component="menu.item" />
-            </flux:menu>
-        </flux:dropdown>
+                <flux:menu>
+                    <flux:menu.item icon="user" href="{{ route('profile') }}">Profile</flux:menu.item>
+                    <flux:menu.separator />
+                    <flux:menu.item icon="arrow-right-start-on-rectangle" wire:click="logout">Logout</flux:menu.item>
+                </flux:menu>
+            </flux:dropdown>
+        @endvolt
     </flux:header>
 
     <flux:sidebar stashable sticky class="border-r border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 lg:hidden">

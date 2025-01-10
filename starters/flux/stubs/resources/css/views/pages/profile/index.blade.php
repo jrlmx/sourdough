@@ -1,12 +1,14 @@
 <?php
 
-use function Laravel\Folio\{name, middleware};
+use function Laravel\Folio\middleware;
+use function Laravel\Folio\name;
 
 name('profile');
 
 middleware(['auth']);
 
 ?>
+
 
 <x-layouts.app pg_title="Profile">
     <div class="space-y-6">

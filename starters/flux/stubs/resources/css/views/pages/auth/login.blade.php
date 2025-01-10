@@ -5,10 +5,10 @@ use Illuminate\Validation\ValidationException;
 
 use function Laravel\Folio\middleware;
 use function Laravel\Folio\name;
+use function Livewire\Volt\protect;
 use function Livewire\Volt\rules;
 use function Livewire\Volt\state;
 use function Livewire\Volt\uses;
-use function Livewire\Volt\protect;
 
 name('login');
 middleware('guest');
@@ -37,7 +37,7 @@ $throttleKey = protect(function () {
 $login = function () {
     $this->validate();
 
-    $this->throttle($this->throttleKey(), 5, function ($seconds) {
+    $this->throttle(5, function ($seconds) {
         throw ValidationException::withMessages([
             'email' => trans('auth.throttle', [
                 'seconds' => $seconds,

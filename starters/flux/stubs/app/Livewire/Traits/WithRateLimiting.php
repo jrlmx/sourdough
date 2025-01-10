@@ -14,7 +14,7 @@ trait WithRateLimiting
 
     protected function throttle(int $limit, callable $callback): void
     {
-        $throttleKey = $this->getThrottleKey();
+        $throttleKey = $this->throttleKey();
 
         if (! RateLimiter::tooManyAttempts($throttleKey, $limit)) {
             RateLimiter::hit($throttleKey);

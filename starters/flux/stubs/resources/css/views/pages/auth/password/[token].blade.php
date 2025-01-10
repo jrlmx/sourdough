@@ -46,7 +46,7 @@ $resetPassword = function (): void {
         return;
     }
 
-    Flux::toast(__($status));
+    Flux::toast($status);
 
     $this->redirect(route('login'), navigate: true);
 };

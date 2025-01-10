@@ -44,7 +44,7 @@ func handleAuthJSON(p *project) error {
 			return err
 		}
 
-		authConfig.HTTPBasic[repo.Name] = HTTPBasicCredentials{
+		authConfig.HTTPBasic[repo.Url] = HTTPBasicCredentials{
 			Username: username,
 			Password: password,
 		}
@@ -74,8 +74,10 @@ func authPrompt(repo Repo) (string, string, error) {
 	form := huh.NewForm(
 		huh.NewGroup(
 			huh.NewInput().Title(fmt.Sprintf("Enter your %s Username", repo.Name)).EchoMode(huh.EchoModePassword).Value(&username),
-			huh.NewInput().Title(fmt.Sprintf("Enter your %s Password", repo.Name)).EchoMode(huh.EchoModePassword).Value(&password),
-		).Title("Enter your " + repo.Name + " credentials"),
+		),
+		huh.NewGroup(
+			huh.NewInput().Title(fmt.Sprintf("Enter your %s Password or License key", repo.Name)).EchoMode(huh.EchoModePassword).Value(&password),
+		),
 	)
 
 	if err := form.Run(); err != nil {

@@ -29,7 +29,17 @@ $updateAccount = function (): void {
 
     $user->save();
 
-    Flux::toast('Profile updated.');
+    Flux::toast('Profile updated.', variant: 'success');
+};
+
+$sendVerification = function () {
+    if (auth()->user()->hasVerifiedEmail()) {
+        return $this->redirectIntended(route('dashboard', absolute: false));
+    }
+
+    auth()->user()->sendEmailVerificationNotification();
+
+    Flux::toast('Email verification sent.');
 };
 
 ?>
@@ -40,6 +50,13 @@ $updateAccount = function (): void {
         <flux:input type="text" label="Name" wire:model="name" placeholder="Name" required autofocus />
 
         <flux:input type="email" label="Email" wire:model="email" placeholder="Email" required />
+
+        @if (auth()->user() instanceof Illuminate\Contracts\Auth\MustVerifyEmail)
+            <div class="flex items-center gap-6 justify-between text-red-600">
+                <p class="text-sm">Your email address is unverified.</p>
+                <flux:button variant="ghost" wire:click="sendVerification">Resend verification link</flux:button>
+            </div>
+        @endif
 
         <flux:button type="submit" variant="primary" wire:loading.attr="disabled" class="w-full">Save</flux:button>
     </form>

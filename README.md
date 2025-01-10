@@ -1,4 +1,4 @@
-# Sourdough
+# Sourdough 🍞
 ## A Customizable Laravel Installer/Starter Kit
 
 > [!WARNING]
