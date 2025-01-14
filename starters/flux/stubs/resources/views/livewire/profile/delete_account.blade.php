@@ -19,7 +19,7 @@ $deleteAccount = function (Logout $logout) {
 
     tap(Auth::user(), $logout(...))->delete();
 
-    $this->redirect(route('login'), navigate: true);
+    $this->redirect(route('login'));
 };
 
 ?>

@@ -51,7 +51,7 @@ $sendVerification = function () {
 
         <flux:input type="email" label="Email" wire:model="email" placeholder="Email" required />
 
-        @if (auth()->user() instanceof Illuminate\Contracts\Auth\MustVerifyEmail)
+        @if (auth()->user() instanceof Illuminate\Contracts\Auth\MustVerifyEmail &&! auth()->user()->hasVerifiedEmail())
             <div class="flex items-center gap-6 justify-between text-red-600">
                 <p class="text-sm">Your email address is unverified.</p>
                 <flux:button variant="ghost" wire:click="sendVerification">Resend verification link</flux:button>
