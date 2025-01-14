@@ -14,7 +14,10 @@ $logout = function (Logout $action) {
 <x-layouts.base>
     <div class="min-h-screen content-center">
         <flux:card class="max-w-xl p-6 mx-auto space-y-6 shadow">
-            <flux:heading size="xl">Sourdough</flux:heading>
+            <div class="flex justify-between items-center">
+                <flux:heading size="xl">Sourdough</flux:heading>
+                <flux:button x-data x-on:click="$flux.dark = ! $flux.dark" icon="moon" variant="subtle" aria-label="Toggle dark mode" />
+            </div>
 
             <p class="prose dark:prose-invert">A highly customizable TALL Stack + Flux UI installer/starter-kit for your next Laravel project.</p>
 

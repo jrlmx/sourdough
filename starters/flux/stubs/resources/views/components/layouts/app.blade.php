@@ -26,6 +26,8 @@ $logout = function (Logout $action) {
 
         <flux:spacer />
 
+        <flux:button x-data x-on:click="$flux.dark = ! $flux.dark" icon="moon" variant="subtle" aria-label="Toggle dark mode" />
+
         @volt('user.menu')
             <flux:dropdown position="top" align="start">
                 <flux:profile avatar="https://fluxui.dev/img/demo/user.png">
