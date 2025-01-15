@@ -98,9 +98,9 @@ sourdough -tree {starter_name}
 
 ## Road to somekind of stability...
 
-Place the default starter(s) into their own unembeded directory or another repo, create a compilation/install script that checks the contents of the starters folder, if no starters are found - offer to download and place the default starters into the empty folder. This should prevent future issues like accidentally overwritting an user's existing starter(s) when updating their local repository to the newest version. Alternatively, change the "flux" starter name to "default" and add an entry in the .gitignore that includes all other subdirectories - less robust but easier to implement.
+Move the default starter(s) to a separate unembedded directory or a different repository. Develop a compilation or installation script to check the contents of the starters folder. If no starters are detected, prompt the user to move or download the default starters into the empty folder. This approach minimizes the risk of overwriting a user’s existing starter(s) when updating their local repository to the latest version. Alternatively, rename the "flux" starter to "default" and update the .gitignore to exclude all other subdirectories. This method is less robust but simpler to implement.
 
-Write tests... and more tests. Better command validation. Config.json schema - once it's "finalized". Etc...
+Write tests—and then write more tests. Improve command validation. Define a schema for config.json once its structure is finalized. Etc...
 
 ## Planned Features
 
