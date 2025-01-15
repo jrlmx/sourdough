@@ -41,7 +41,7 @@ func main() {
 	if len(args) < 1 {
 		log.Fatalf("Usage: %s [project_name]\n", os.Args[0])
 	}
-	name = args[1]
+	name = args[0]
 
 	if _, err := os.Stat(name); err == nil {
 		log.Fatalf("project directory already exists: %s", name)
