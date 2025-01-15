@@ -18,5 +18,6 @@
     ],
     "artisan": ["folio:install", "volt:install"],
     "npx": [],
+    "commands": [],
     "remove_files": ["resources/views/welcome.blade.php"]
 }

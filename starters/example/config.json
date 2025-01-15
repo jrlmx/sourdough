@@ -12,5 +12,6 @@
     "repos": [],
     "artisan": [],
     "npx": [],
+    "commands": ["composer run dev"],
     "remove_files": []
 }

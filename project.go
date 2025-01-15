@@ -6,12 +6,13 @@ import (
 )
 
 type Config struct {
-	PHP     PackageManifest `json:"php"`
-	JS      PackageManifest `json:"js"`
-	Files   []string        `json:"remove_files"`
-	Repos   []Repo          `json:"repos"`
-	Artisan []string        `json:"artisan"`
-	NPX     []string        `json:"npx"`
+	PHP      PackageManifest `json:"php"`
+	JS       PackageManifest `json:"js"`
+	Files    []string        `json:"remove_files"`
+	Repos    []Repo          `json:"repos"`
+	Artisan  []string        `json:"artisan"`
+	NPX      []string        `json:"npx"`
+	Commands []string        `json:"commands"`
 }
 
 type PackageManifest struct {

@@ -14,13 +14,17 @@ func handlePHPDeps(p *project) error {
 	}
 
 	prod := p.config.PHP.Prod
-	if err := runQuietly("composer", append([]string{"require", "--no-install"}, prod...)...); err != nil {
+	if err := runCommand("composer", QuietMode, append([]string{"require", "--no-update"}, prod...)...); err != nil {
 		return fmt.Errorf("failed to add composer dependencies to composer.json (prod): %w", err)
 	}
 
 	dev := p.config.PHP.Dev
-	if err := runQuietly("composer", append([]string{"require", "--dev", "--no-install"}, dev...)...); err != nil {
+	if err := runCommand("composer", QuietMode, append([]string{"require", "--dev", "--no-update"}, dev...)...); err != nil {
 		return fmt.Errorf("failed to add composer dependencies to composer.json (dev): %w", err)
+	}
+
+	if err := runCommand("composer", QuietMode, "update"); err != nil {
+		return fmt.Errorf("failed to update composer dependencies: %w", err)
 	}
 
 	if err := run("composer", "install"); err != nil {

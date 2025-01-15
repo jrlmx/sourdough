@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"slices"
 
 	"github.com/charmbracelet/huh"
 )
@@ -14,22 +15,30 @@ func handleStarterSelection(p *project) error {
 		return err
 	}
 
-	var kit string
-
-	form := huh.NewForm(
-		huh.NewGroup(
-			huh.NewSelect[string]().
-				Title("Select a starter kit to apply").
-				Options(huh.NewOptions(opts...)...).
-				Value(&kit),
-		),
-	)
-
-	if err := form.Run(); err != nil {
-		return fmt.Errorf("starter kit selection failed: %w", err)
+	if len(opts) < 1 {
+		return errors.New("no starters found")
 	}
-	p.kit = &kit
-	p.loadConfig()
+
+	if p.kit != nil && *p.kit != "" {
+		if !slices.Contains(opts, *p.kit) {
+			fmt.Println("invalid starter kit selected - please try again")
+		}
+
+		p.kit = nil
+	}
+
+	if p.kit == nil || *p.kit == "" {
+		kit, err := promptForStarterKit(opts)
+		if err != nil {
+			return err
+		}
+
+		p.kit = &kit
+	}
+
+	if err := p.loadConfig(); err != nil {
+		return fmt.Errorf("failed to load config: %w", err)
+	}
 
 	return nil
 }
@@ -52,4 +61,28 @@ func availableStarters() ([]string, error) {
 	}
 
 	return opts, nil
+}
+
+func promptForStarterKit(opts []string) (string, error) {
+	var kit string
+
+	form := huh.NewForm(
+		huh.NewGroup(
+			huh.NewSelect[string]().
+				Title("Select a starter kit to apply").
+				Options(huh.NewOptions(opts...)...).
+				Value(&kit).Validate(func(s string) error {
+				if !slices.Contains(opts, s) {
+					return fmt.Errorf("invalid starter kit: %s", s)
+				}
+				return nil
+			}),
+		),
+	)
+
+	if err := form.Run(); err != nil {
+		return "", fmt.Errorf("starter kit selection failed: %w", err)
+	}
+
+	return kit, nil
 }
