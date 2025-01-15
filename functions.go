@@ -41,9 +41,9 @@ func runUntrustedCommand(cmd string) error {
 
 	var mode runMode
 
-	if strings.HasPrefix(cname, "quietly:") {
+	if strings.HasPrefix(cname, "quiet:") {
 		mode = QuietMode
-		cname = strings.TrimPrefix(cname, "quietly:")
+		cname = strings.TrimPrefix(cname, "quiet:")
 	} else if strings.HasPrefix(cname, "interact:") {
 		mode = InteractiveMode
 		cname = strings.TrimPrefix(cname, "interact:")
@@ -74,7 +74,6 @@ func validateCommand(cname string, cargs []string) error {
 
 	allowed := []string{
 		"php",
-		"laravel",
 		"composer",
 		"npm",
 		"npx",

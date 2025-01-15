@@ -2,7 +2,7 @@
 ## A Customizable Laravel Installer/Starter Kit
 
 > [!WARNING]
-> This was created primarily for personal use - I won't necessarily make changes based on your feedback.
+> This was created primarily for personal use - I won't necessarily make changes based on your feedback unless it's a egregious bug or security issue.
 > The installer and the default "starter" are works-in-progress and may contain bugs.
 
 ## Installation
@@ -87,6 +87,27 @@ starters/
         └── ...
 ```
 
+## Run a number of user defined cli commands using the "commands" array in your config.json
+
+Currently the commands api supports the following white-list:
+php, composer, npm, npx, git - or any script/executable in the /vendors or /node_modules folders
+
+```json
+{
+    "commands": [
+        "interact:git init",
+        "git add .",
+        "quiet:./vendor/bin/pint"
+    ]
+}
+```
+
+The "interact:" and "quiet:" prefixes change the way Sourdough internally handles the input/output of a given command.
+
+Quiet mode ("quiet:") will not produce any output.
+Interactive ("interact:") mode will allow you to interact with any cli as you normally would.
+Normal mode (the default - no prefix) simply echos the output without any prompts - this may cause issues with some CLIs that require user interaction.
+
 ## Inspect Starter(s) after compiling the executable
 
 You can use the -config and -tree flags to view the config.json and file tree, respectively, of a specified starter within the embedded filesystem.
@@ -98,7 +119,9 @@ sourdough -tree {starter_name}
 
 ## Road to somekind of stability...
 
-Move the default starter(s) to a separate unembedded directory or a different repository. Develop a compilation or installation script to check the contents of the starters folder. If no starters are detected, prompt the user to move or download the default starters into the empty folder. This approach minimizes the risk of overwriting a user’s existing starter(s) when updating their local repository to the latest version. Alternatively, rename the "flux" starter to "default" and update the .gitignore to exclude all other subdirectories. This method is less robust but simpler to implement.
+Move the default starter(s) to a separate unembedded directory or a different repository...
+...Develop a compilation or installation script to check the contents of the starters folder. If no starters are detected, prompt the user to move or download the default starters into the empty folder. This approach minimizes the risk of overwriting a user’s existing starter(s) when updating their local repository to the latest version.
+...Alternatively, rename the "flux" starter to "default" and update the .gitignore to exclude all other subdirectories. This method is less robust but simpler to implement.
 
 Write tests—and then write more tests. Improve command validation. Define a schema for config.json once its structure is finalized. Etc...
 
@@ -108,7 +131,7 @@ Write tests—and then write more tests. Improve command validation. Define a sc
 - [x] Handle multiple private repos and auth.json credentials
 - [x] Support commandline args for selecting a specific "starter"
 - [x] Allow viewing a starter's config and file tree via commandline args
-- [ ] Support arbitrary commands for things like /vendor script execution during install (in-progress)
+- [x] Support arbitrary commands for things like /vendor script execution during install (in-progress)
 - [ ] Expose hooks in config.json to allow commands to be executed at specific stages in the the installation process
 - [ ] Build a TUI for inspecting installed starters, their config, and embeded file systems accessible via commandline flag
 - [ ] Allow the injection of code snippets into a specifically targeted file, closure, or array
