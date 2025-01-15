@@ -44,9 +44,9 @@ func runUntrustedCommand(cmd string) error {
 	if strings.HasPrefix(cname, "quietly:") {
 		mode = QuietMode
 		cname = strings.TrimPrefix(cname, "quietly:")
-	} else if strings.HasPrefix(cname, "interactive:") {
+	} else if strings.HasPrefix(cname, "interact:") {
 		mode = InteractiveMode
-		cname = strings.TrimPrefix(cname, "interactive:")
+		cname = strings.TrimPrefix(cname, "interact:")
 	} else {
 		mode = NormalMode
 	}

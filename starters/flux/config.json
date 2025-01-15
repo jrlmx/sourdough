@@ -14,5 +14,6 @@
         }
     ],
     "artisan": ["folio:install", "volt:install"],
+    "commands": ["interact:git init"],
     "remove_files": ["resources/views/welcome.blade.php"]
 }
