@@ -87,11 +87,23 @@ starters/
         └── ...
 ```
 
+## Inspect Starter(s) after compiling the executable
+
+You can use the -config and -tree flags to view the config.json and file tree, respectively, of a specified starter within the embedded filesystem.
+
+```bash
+sourdough -config {starter_name}
+sourdough -tree {starter_name}
+```
+
 ## Planned Features
 
 - [x] Support multiple "starters" (read: starter-kits)
 - [x] Handle multiple private repos and auth.json credentials
-- [ ] Support commandline args for selecting a specific "starter"
+- [x] Support commandline args for selecting a specific "starter"
+- [x] Allow viewing a starter's config and file tree via commandline args
+- [ ] Support arbitrary commands for things like /vendor script execution during install (in-progress)
+- [ ] Build a TUI for inspecting installed starters, their config, and embeded file systems accessible via commandline flag
 - [ ] Allow the injection of code snippets into a specifically targeted file, closure, or array
 
 - [ ] ~~Add a Svelte-Inertia starter~~ (cancelled - for now)

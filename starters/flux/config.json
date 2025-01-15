@@ -1,13 +1,10 @@
 {
     "php": {
         "prod": ["laravel/folio", "livewire/livewire", "livewire/volt", "livewire/flux", "livewire/flux-pro"],
-        "dev": ["wire-elements/wire-spy"],
-        "remove": []
+        "dev": ["wire-elements/wire-spy"]
     },
     "js": {
-        "prod": [],
-        "dev": ["prettier", "prettier-plugin-blade", "@tailwindcss/typography"],
-        "remove": []
+        "dev": ["prettier", "prettier-plugin-blade", "@tailwindcss/typography"]
     },
     "repos": [
         {
@@ -17,7 +14,5 @@
         }
     ],
     "artisan": ["folio:install", "volt:install"],
-    "npx": [],
-    "commands": [],
     "remove_files": ["resources/views/welcome.blade.php"]
 }

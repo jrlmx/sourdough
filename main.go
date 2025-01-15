@@ -17,6 +17,7 @@ var starters embed.FS
 
 func main() {
 	kitFlag := flag.String("kit", "", "Specify the starter kit to use")
+
 	configFlag := flag.String("config", "", "Output the embeded config file for the specified kit and exit")
 	treeFlag := flag.String("tree", "", "Output the embeded file tree for the specified kit and exit")
 
