@@ -63,6 +63,7 @@ The default "flux" starter will install Livewire, Volt, Folio, Flux and Flux Pro
     ],
     "artisan": ["folio:install", "volt:install"],
     "npx": [],
+    "commands": [],
     "remove_files": ["resources/views/welcome.blade.php"]
 }
 ```
