@@ -90,7 +90,7 @@ starters/
 ## Run a number of user defined cli commands using the "commands" array in your config.json
 
 Currently the commands api supports the following white-list:
-php, composer, npm, npx, git - or any script/executable in the /vendors or /node_modules folders
+php, composer, npm, npx, git - or any script/executable in the /vendors or /node_modules folders... use with caution.
 
 ```json
 {
@@ -107,6 +107,8 @@ The "interact:" and "quiet:" prefixes change the way Sourdough internally handle
 Quiet mode ("quiet:") will not produce any output.
 Interactive ("interact:") mode will allow you to interact with any cli as you normally would.
 Normal mode (the default - no prefix) simply echos the output without any prompts - this may cause issues with some CLIs that require user interaction.
+
+Note: I plan to introduce lifecycle hooks to allow execution at specific points in the installation process - so the config.json "api" for this feature is likely to change or be expanded on in some form - see the "road to stability" section below.
 
 ## Inspect Starter(s) after compiling the executable
 
