@@ -96,6 +96,12 @@ sourdough -config {starter_name}
 sourdough -tree {starter_name}
 ```
 
+## Road to somekind of stability...
+
+Place the default starter(s) into their own unembeded directory or another repo, create a compilation/install script that checks the contents of the starters folder, if no starters are found - offer to download and place the default starters into the empty folder. This should prevent future issues like accidentally overwritting an user's existing starter(s) when updating their local repository to the newest version. Alternatively, change the "flux" starter name to "default" and add an entry in the .gitignore that includes all other subdirectories - less robust but easier to implement.
+
+Write tests... and more tests. Better command validation. Config.json schema - once it's "finalized". Etc...
+
 ## Planned Features
 
 - [x] Support multiple "starters" (read: starter-kits)
@@ -103,6 +109,7 @@ sourdough -tree {starter_name}
 - [x] Support commandline args for selecting a specific "starter"
 - [x] Allow viewing a starter's config and file tree via commandline args
 - [ ] Support arbitrary commands for things like /vendor script execution during install (in-progress)
+- [ ] Expose hooks in config.json to allow commands to be executed at specific stages in the the installation process
 - [ ] Build a TUI for inspecting installed starters, their config, and embeded file systems accessible via commandline flag
 - [ ] Allow the injection of code snippets into a specifically targeted file, closure, or array
 

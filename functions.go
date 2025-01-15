@@ -34,18 +34,6 @@ func runCommand(cname string, mode runMode, cargs ...string) error {
 	return nil
 }
 
-func run(cname string, cargs ...string) error {
-	return runCommand(cname, NormalMode, cargs...)
-}
-
-func runQuietly(cname string, cargs ...string) error {
-	return runCommand(cname, QuietMode, cargs...)
-}
-
-func runInteractive(cname string, cargs ...string) error {
-	return runCommand(cname, InteractiveMode, cargs...)
-}
-
 func runUntrustedCommand(cmd string) error {
 	parts := strings.Split(strings.TrimSpace(cmd), " ")
 	cname := parts[0]

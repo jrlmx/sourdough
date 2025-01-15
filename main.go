@@ -80,11 +80,12 @@ func actions() []func(p *project) error {
 		handleStarterSelection,
 		handleCreateProject,
 		handleAuthJSON,
-		handleCleanUp,
+		handlePreCleanUp,
 		handleGitignore,
 		handlePHPDeps,
 		handleJSDeps,
 		handlePublishFiles,
+		handleUserCommands,
 	}
 }
 
@@ -141,6 +142,7 @@ func printConfig(starter string) error {
 func printFileTree(starter string) error {
 	basePath := filepath.Join("starters", starter)
 
+	// TODO: fix tree structure
 	err := fs.WalkDir(starters, basePath, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err

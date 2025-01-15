@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-func handleCleanUp(p *project) error {
+func handlePreCleanUp(p *project) error {
 	err := removeFiles(p.config.Files)
 	if err != nil {
 		return err
@@ -32,7 +32,7 @@ func removeJSPackages(packages []string) error {
 	}
 
 	fmt.Println("Cleaning up unwanted node packages...")
-	if err := runQuietly("npm", append([]string{"remove"}, packages...)...); err != nil {
+	if err := runCommand("npm", QuietMode, append([]string{"remove"}, packages...)...); err != nil {
 		return fmt.Errorf("failed to remove node packages: %w", err)
 	}
 
@@ -46,7 +46,7 @@ func removePHPPackages(packages []string) error {
 	}
 
 	fmt.Println("Cleaning up unwanted composer packages...")
-	if err := runQuietly("composer", append([]string{"remove"}, packages...)...); err != nil {
+	if err := runCommand("composer", QuietMode, append([]string{"remove"}, packages...)...); err != nil {
 		return fmt.Errorf("failed to remove composer packages: %w", err)
 	}
 
