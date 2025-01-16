@@ -1,6 +1,6 @@
 {
     "$schema": "../../config-schema.json",
-    "remove_files": ["resources/views/welcome.blade.php"],
+    "remove_files": ["resources/views/welcome.blade.php", "resources/js/bootstrap.js"],
     "repos": [],
     "php": {
         "prod": ["livewire/livewire", "livewire/volt", "laravel/folio"],
@@ -14,5 +14,5 @@
     },
     "artisan": ["folio:install", "volt:install"],
     "npx": [],
-    "commands": []
+    "commands": ["git init", "git add .", "git commit -m \"initial\"", "./vendor/bin/pint"]
 }

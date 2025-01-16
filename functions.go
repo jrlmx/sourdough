@@ -88,17 +88,29 @@ func validateCommand(cname string, cargs []string) error {
 	if !slices.Contains(allowed, cname) && !slices.ContainsFunc(allowedPrefixes, func(s string) bool {
 		return strings.HasPrefix(cname, s)
 	}) {
-		return fmt.Errorf("invalid command: %s", cname)
+		return fmt.Errorf("command not allowed: %s", cname)
 	}
 
-	if _, err := os.Stat(cname); err != nil {
-		if os.IsNotExist(err) {
-			return fmt.Errorf("command %s does not exist", cname)
+	if slices.Contains(allowed, cname) {
+		if _, err := isInstalled(cname); err != nil {
+			return err
 		}
-		return fmt.Errorf("error checking command %s: %w", cname, err)
+		return nil
 	}
 
-	return nil
+	if slices.ContainsFunc(allowedPrefixes, func(s string) bool {
+		return strings.HasPrefix(cname, s)
+	}) {
+		if _, err := os.Stat(cname); err != nil {
+			if os.IsNotExist(err) {
+				return fmt.Errorf("command %s is not installed", cname)
+			}
+			return fmt.Errorf("error checking command %s: %w", cname, err)
+		}
+		return nil
+	}
+
+	return errors.New("command not allowed")
 }
 
 func isInstalled(cname string) (string, error) {
