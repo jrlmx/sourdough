@@ -28,7 +28,7 @@
                     "items": {
                         "type": "string"
                     },
-                    "description": "list of files to remove when scaffolding a new project"
+                    "description": "list of composer packages to remove when scaffolding a new project"
                 }
             }
         },
@@ -55,7 +55,7 @@
                     "items": {
                         "type": "string"
                     },
-                    "description": "list of files to remove when scaffolding a new project"
+                    "description": "list of npm packages to remove when scaffolding a new project"
                 }
             }
         },
