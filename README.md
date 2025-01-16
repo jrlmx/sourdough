@@ -2,7 +2,7 @@
 ## A Customizable Laravel Installer/Starter Kit
 
 > [!WARNING]
-> This was created primarily for personal use - I won't necessarily make changes based on your feedback unless it's a egregious bug or security issue.
+> This was created primarily for personal use - I won't necessarily make changes based on your feedback unless it's an egregious bug or security issue.
 > The installer and the default "starter" are works-in-progress and may contain bugs.
 
 ## Installation
