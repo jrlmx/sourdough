@@ -122,7 +122,7 @@ sourdough -tree {starter_name}
 
 ## Road to somekind of stability...
 
-Ensure user derived starters are not overwritten when updating the repository. Considering moving the flux starter directory into it's own repo and leaving the example starter as boilerplate.
+Ensure user derived starters are not overwritten when updating the repository. Considering moving the flux starter into it's own repo and leaving the example starter as boilerplate.
 
 Write tests—and then write more tests. Improve command validation. Define a schema for config.json once its structure is finalized. Etc...
 
@@ -136,6 +136,7 @@ Write tests—and then write more tests. Improve command validation. Define a sc
 - [ ] Expose hooks in config.json to allow commands to be executed at specific stages in the the installation process
 - [ ] Build a TUI for inspecting installed starters, their config, and embeded file systems accessible via commandline flag
 - [ ] Allow the injection of code snippets into a specifically targeted file, closure, or array
+- [ ] Make user commands "optional:" by showing a prompt before execution & parse multiple prefix-options like "optional:interact:command"
 
 - [ ] ~~Add a Svelte-Inertia starter~~ (cancelled - for now)
 
