@@ -7,6 +7,7 @@
     "properties": {
         "php": {
             "type": "object",
+            "title": "composer dependencies",
             "properties": {
                 "prod": {
                     "type": "array",
@@ -33,6 +34,7 @@
         },
         "js": {
             "type": "object",
+            "title": "npm dependencies",
             "properties": {
                 "prod": {
                     "type": "array",
@@ -59,6 +61,8 @@
         },
         "repos": {
             "type": "array",
+            "title": "composer repositories",
+            "description": "list of composer repositories to install before scaffolding a new project",
             "items": {
                 "type": "object",
                 "properties": {
@@ -73,41 +77,39 @@
                     }
                 },
                 "required": ["name", "url"]
-            },
-            "description": "list of composer repositories to install before scaffolding a new project",
-            "examples": ["https://github.com/laravel/laravel.git"]
+            }
         },
         "artisan": {
             "type": "array",
+            "title": "artisan commands",
+            "description": "list of artisan commands to run when scaffolding a new project",
             "items": {
                 "type": "string"
-            },
-            "description": "list of artisan commands to run when scaffolding a new project",
-            "examples": ["folio:install", "volt:install"]
+            }
         },
         "npx": {
             "type": "array",
+            "title": "npx commands",
+            "description": "list of npx commands to run when scaffolding a new project",
             "items": {
                 "type": "string"
-            },
-            "description": "list of npx commands to run when scaffolding a new project",
-            "examples": ["prettier", "prettier-plugin-blade", "@tailwindcss/typography", "@tailwindcss/forms"]
+            }
         },
         "commands": {
             "type": "array",
+            "title": "custom commands",
+            "description": "list of user defined commands to run when scaffolding is complete - whitelisted: npm, npx, php, composer, git, and anything in the /vendor or /node_modules folder(s)",
             "items": {
                 "type": "string"
-            },
-            "description": "list of user defined commands to run when scaffolding is complete - whitelist: npm, npx, php, composer, git, and anything in the /vendor or /node_modules folder(s)",
-            "examples": ["git add .", "git commit -m 'initial commit'", "git push origin main"]
+            }
         },
         "remove_files": {
             "type": "array",
+            "title": "files to remove",
+            "description": "list of default files to remove when scaffolding a new project - e.g /resources/views/welcome.blade.php",
             "items": {
                 "type": "string"
-            },
-            "description": "list of default files to remove when scaffolding a new project",
-            "examples": ["/resources/views/welcome.blade.php"]
+            }
         }
     }
 }
