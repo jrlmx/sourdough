@@ -1,6 +1,6 @@
 # My Flux Starter
 
-The impetus for this whole project, the flux starter, was to create a breeze-esque starter kit on the TALL stack - with Flux UI out of the box.
+The impetus for this whole project, the flux starter, was created as a breeze-esque starter kit on the TALL stack - made with Flux UI out of the box.
 
 ## Usage
 
