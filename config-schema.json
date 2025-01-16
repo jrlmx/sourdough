@@ -10,14 +10,23 @@
             "properties": {
                 "prod": {
                     "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
                     "description": "list of composer packages to install for production"
                 },
                 "dev": {
                     "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
                     "description": "list of composer packages to install for development"
                 },
                 "remove": {
                     "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
                     "description": "list of files to remove when scaffolding a new project"
                 }
             }
@@ -27,40 +36,76 @@
             "properties": {
                 "prod": {
                     "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
                     "description": "list of npm packages to install for production"
                 },
                 "dev": {
                     "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
                     "description": "list of npm packages to install for development"
                 },
                 "remove": {
                     "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
                     "description": "list of files to remove when scaffolding a new project"
                 }
             }
         },
         "repos": {
             "type": "array",
-            "description": "list of git repositories to clone when scaffolding a new project",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "url": {
+                        "type": "string"
+                    },
+                    "auth": {
+                        "type": "boolean"
+                    }
+                },
+                "required": ["name", "url"]
+            },
+            "description": "list of composer repositories to install before scaffolding a new project",
             "examples": ["https://github.com/laravel/laravel.git"]
         },
         "artisan": {
             "type": "array",
+            "items": {
+                "type": "string"
+            },
             "description": "list of artisan commands to run when scaffolding a new project",
             "examples": ["folio:install", "volt:install"]
         },
         "npx": {
             "type": "array",
+            "items": {
+                "type": "string"
+            },
             "description": "list of npx commands to run when scaffolding a new project",
             "examples": ["prettier", "prettier-plugin-blade", "@tailwindcss/typography", "@tailwindcss/forms"]
         },
         "commands": {
             "type": "array",
-            "description": "list of user defined commands to run when scaffolding is complete (whitelisted: npm, npx, php, composer, git, and anything in the /vendor or /node_modules folder(s)",
+            "items": {
+                "type": "string"
+            },
+            "description": "list of user defined commands to run when scaffolding is complete - whitelist: npm, npx, php, composer, git, and anything in the /vendor or /node_modules folder(s)",
             "examples": ["git add .", "git commit -m 'initial commit'", "git push origin main"]
         },
         "remove_files": {
             "type": "array",
+            "items": {
+                "type": "string"
+            },
             "description": "list of default files to remove when scaffolding a new project",
             "examples": ["/resources/views/welcome.blade.php"]
         }

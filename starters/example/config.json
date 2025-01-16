@@ -1,5 +1,7 @@
 {
     "$schema": "../../config-schema.json",
+    "remove_files": ["resources/views/welcome.blade.php"],
+    "repos": [],
     "php": {
         "prod": ["livewire/livewire", "livewire/volt", "laravel/folio"],
         "dev": ["wire-elements/wire-spy"],
@@ -10,9 +12,7 @@
         "dev": ["prettier", "prettier-plugin-blade", "@tailwindcss/typography", "@tailwindcss/forms"],
         "remove": ["axios"]
     },
-    "repos": [],
     "artisan": ["folio:install", "volt:install"],
     "npx": [],
-    "commands": [],
-    "remove_files": ["resources/views/welcome.blade.php"]
+    "commands": []
 }
