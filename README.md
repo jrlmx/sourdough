@@ -36,7 +36,7 @@ When run, Sourdough will:
 
 ### Creating Custom Starters
 
-Originally designed to scaffold new TALL Stack applications with Livewire/Flux, Sourdough now supports multiple "starters" (starter-kits) - including completely custom kits. To create your own, make a new folder (e.g., "my-starter") in the starters directory, create a config.json to define your composer/npm dependencies including any to be removed from the default Laravel Application structure, and add your boilerplate files to a "stubs" directory as if you were adding them to a new project. **Note**: Sourdough will maintain the "stubs" directory structure when copying files to a fresh Laravel project.
+Originally designed to scaffold new TALL Stack applications with Livewire/Flux, Sourdough now supports multiple "starters" (starter-kits) - including completely custom ones. To create your own, make a new folder (e.g., "my-starter") in the starters directory, create a config.json to define your composer/npm dependencies including any to be removed from the default Laravel Application structure, and add your boilerplate files to a "stubs" directory as if you were adding them to a new project. **Note**: Sourdough will maintain the "stubs" directory structure when copying files to a fresh Laravel project.
 
 The default "flux" starter will install Livewire, Volt, Folio, Flux and Flux Pro (you'll be prompted for your Flux credentials when you create a new project) and then scaffold an opinionated auth flow using Volt's functional API. Keep in mind it's entirely customizable as long as you're willing to compile your own binary.
 
@@ -122,9 +122,7 @@ sourdough -tree {starter_name}
 
 ## Road to somekind of stability...
 
-Move the default starter(s) to a separate unembedded directory or a different repository...
-...Develop a compilation or installation script to check the contents of the starters folder. If no starters are detected, prompt the user to move or download the default starters into the empty folder. This approach minimizes the risk of overwriting a user’s existing starter(s) when updating their local repository to the latest version.
-...Alternatively, rename the "flux" starter to "default" and update the .gitignore to exclude all other subdirectories. This method is less robust but simpler to implement.
+Ensure user derived starters are not overwritten when updating the repository. Considering moving the flux starter directory into it's own repo and leaving the example starter as boilerplate.
 
 Write tests—and then write more tests. Improve command validation. Define a schema for config.json once its structure is finalized. Etc...
 
@@ -145,4 +143,4 @@ Write tests—and then write more tests. Improve command validation. Define a sc
 
 **Why use Go?** Because I wanted Sourdough to compile to a single binary while remaining customizable. Yes, PHP apps can be frankensteined into a self-contained binary, which is cool, but that's not as straightforward for my use case - also I can write Go, so I did.
 
-**Why build web apps with PHP?** Because I like my batteries included for most of the projects I currently work on. Go is awesome, and if someone builds a Laravel equivalent with all the polish it's acquired since its inception, I will consider switching.
+**Why build web apps with PHP?** Because I like my batteries included for most of the projects I currently work on. Go is awesome, and if someone builds a Laravel equivalent with all the polish it's acquired since its inception - I will consider switching.

@@ -1,4 +1,5 @@
 {
+    "$schema": "../../config-schema.json",
     "php": {
         "prod": ["laravel/folio", "livewire/livewire", "livewire/volt", "livewire/flux", "livewire/flux-pro"],
         "dev": ["wire-elements/wire-spy"]
