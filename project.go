@@ -10,6 +10,7 @@ type Config struct {
 	GitURL   string          `json:"git_url"`
 	PHP      PackageManifest `json:"php"`
 	JS       PackageManifest `json:"js"`
+	Flags    []string        `json:"flags"`
 	Files    []string        `json:"remove_files"`
 	Repos    []Repo          `json:"repos"`
 	Artisan  []string        `json:"artisan"`

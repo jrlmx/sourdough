@@ -5,6 +5,19 @@
     "description": "a sourdough 'starter' configuration file for specifying project dependencies, commands to run, and files to be removed when scaffolding a new project",
     "type": "object",
     "properties": {
+        "git_url": {
+            "type": "string",
+            "title": "git url",
+            "description": "url of a git repo to clone instead of using the Laravel installer"
+        },
+        "flags": {
+            "type": "array",
+            "title": "flags",
+            "description": "list of flags to pass to the Laravel installer",
+            "items": {
+                "type": "string"
+            }
+        },
         "php": {
             "type": "object",
             "title": "composer dependencies",

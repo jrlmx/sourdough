@@ -3,9 +3,9 @@
 
 If you're like me, you have a set of dependencies, configuration files, helpers, or whatever else you just HAVE to have in your new Laravel projects. This tool aims to make it easy to create a new Laravel project with the right dependencies, configuration, and other files in place - and it's completely customizable.
 
-Already have a favorite starter-kit? You can install and extend it with this tool.
+Already have a favorite starter-kit? The tool will install - or clone - and extend it with your custom configuration.
 
-Configure it once, use it over and over again.
+Configure it once, use it over and over again...
 
 > [!WARNING]
 > This was created primarily for personal use - I won't necessarily make changes based on your feedback unless it's an egregious bug or security issue.
@@ -110,14 +110,18 @@ Quiet mode ("quiet:") will not produce any output.
 Interactive ("interact:") mode will allow you to interact with any cli as you normally would.
 Normal mode (the default - no prefix) simply echos the output without any prompts - this may cause issues with some CLIs that require user interaction.
 
-The -shout flag will override the "quiet:" and force output to be displayed (useful for debugging).
+The "--shout" flag will override the "quiet:" and force output to be displayed (useful for debugging).
+
+```bash
+sourdough --shout
+```
 
 ## Hooks
 
 You can use the -hooks flag to view the available hooks for user defined commands.
 
 ```bash
-sourdough -hooks
+sourdough --hooks
 ```
 
 Hooks execute after the action referenced in the hook name. Usage: `@hook_name:command_name args` in the commands array of the config.json.
@@ -127,8 +131,8 @@ Hooks execute after the action referenced in the hook name. Usage: `@hook_name:c
 You can use the -config and -tree flags to view the config.json and file tree, respectively, of a specified starter within the embedded filesystem.
 
 ```bash
-sourdough -config {starter_name}
-sourdough -tree {starter_name}
+sourdough --config {starter_name}
+sourdough --tree {starter_name}
 ```
 
 ## Road to somekind of stability...

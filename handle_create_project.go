@@ -13,7 +13,7 @@ func handleCreateProject(p *project) error {
 			return fmt.Errorf("failed to clone starter template: %w", err)
 		}
 	} else {
-		if err := runCommand("laravel", QuietMode, "new", p.name); err != nil {
+		if err := runCommand("laravel", QuietMode, append([]string{"new", p.name}, p.config.Flags...)...); err != nil {
 			return fmt.Errorf("failed to create Laravel project: %w", err)
 		}
 	}

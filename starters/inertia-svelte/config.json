@@ -1,4 +1,0 @@
-{
-    "$schema": "../../config-schema.json",
-    "git_url": "https://github.com/joshcirre/laravel-breeze-svelte"
-}
