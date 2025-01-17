@@ -34,29 +34,31 @@ func runCommand(cname string, mode runMode, cargs ...string) error {
 	return nil
 }
 
-func runUntrustedCommand(cmd string) error {
-	parts := strings.Split(strings.TrimSpace(cmd), " ")
-	cname := parts[0]
-	cargs := parts[1:]
-
-	var mode runMode
-
-	if strings.HasPrefix(cname, "quiet:") {
-		mode = QuietMode
-		cname = strings.TrimPrefix(cname, "quiet:")
-	} else if strings.HasPrefix(cname, "interact:") {
-		mode = InteractiveMode
-		cname = strings.TrimPrefix(cname, "interact:")
-	} else {
-		mode = NormalMode
-	}
-
-	err := validateCommand(cname, cargs)
+func runUserCommand(cmd command) error {
+	err := validateCommand(cmd.name, cmd.args)
 	if err != nil {
-		return err
+		return fmt.Errorf("invalid command: %w", err)
 	}
 
-	return runCommand(cname, mode, cargs...)
+	return runCommand(cmd.name, cmd.mode, cmd.args...)
+}
+
+func runUserCommands(hook string, commands map[string][]command) error {
+	if _, ok := commands[hook]; !ok {
+		return nil
+	}
+
+	if len(commands[hook]) < 1 {
+		return nil
+	}
+
+	for _, cmd := range commands[hook] {
+		if err := runUserCommand(cmd); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func validateCommand(cname string, cargs []string) error {

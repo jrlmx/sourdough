@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-func handlePreCleanUp(p *project) error {
+func handleCleanUp(p *project) error {
 	err := removeFiles(p.config.Files)
 	if err != nil {
 		return err

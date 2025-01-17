@@ -19,26 +19,12 @@ func handleStarterSelection(p *project) error {
 		return errors.New("no starters found")
 	}
 
-	if p.kit != nil && *p.kit != "" {
-		if !slices.Contains(opts, *p.kit) {
-			fmt.Println("invalid starter kit selected - please try again")
-		}
-
-		p.kit = nil
+	kit, err := promptForStarterKit(opts)
+	if err != nil {
+		return err
 	}
 
-	if p.kit == nil || *p.kit == "" {
-		kit, err := promptForStarterKit(opts)
-		if err != nil {
-			return err
-		}
-
-		p.kit = &kit
-	}
-
-	if err := p.loadConfig(); err != nil {
-		return fmt.Errorf("failed to load config: %w", err)
-	}
+	p.init(kit)
 
 	return nil
 }

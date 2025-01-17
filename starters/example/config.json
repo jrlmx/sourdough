@@ -14,5 +14,5 @@
     },
     "artisan": ["folio:install", "volt:install"],
     "npx": [],
-    "commands": ["git init", "git add .", "git commit -m \"initial\"", "./vendor/bin/pint"]
+    "commands": ["git init", "git add .", "quiet:git commit -m \"initial\"", "quiet:./vendor/bin/pint"]
 }

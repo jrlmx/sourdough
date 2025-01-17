@@ -12,15 +12,27 @@ import (
 	"strings"
 )
 
+type action struct {
+	name     string
+	hooks    bool
+	callback func(p *project) error
+}
+
 //go:embed all:starters/*
 var starters embed.FS
 
 func main() {
-	kitFlag := flag.String("kit", "", "Specify the starter kit to use")
+	var hooksFlag bool
 
+	flag.BoolVar(&hooksFlag, "hooks", false, "Output the available command hooks and exit")
 	configFlag := flag.String("config", "", "Output the embeded config file for the specified kit and exit")
 	treeFlag := flag.String("tree", "", "Output the embeded file tree for the specified kit and exit")
 
+	flag.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s project_name \n", os.Args[0])
+		fmt.Fprintf(flag.CommandLine.Output(), "\nFlags:\n")
+		flag.PrintDefaults()
+	}
 	flag.Parse()
 
 	if *configFlag != "" {
@@ -33,6 +45,13 @@ func main() {
 	if *treeFlag != "" {
 		if err := printFileTree(*treeFlag); err != nil {
 			log.Fatal(err)
+		}
+		os.Exit(0)
+	}
+
+	if hooksFlag {
+		for _, hook := range hooks() {
+			fmt.Println(hook)
 		}
 		os.Exit(0)
 	}
@@ -55,38 +74,48 @@ func main() {
 	}
 
 	pdir := filepath.Join(wdir, cleaned)
-	p := newProject(cleaned, pdir)
-	if kitFlag != nil {
-		p.kit = kitFlag
-	}
+	p := newProject(cleaned, pdir, hooks())
 
 	if err := checkSystemDeps(); err != nil {
 		log.Fatal(err)
 	}
 
 	for _, action := range actions() {
-		if err := action(&p); err != nil {
+		if err := action.callback(&p); err != nil {
+			cleanupOnFailure(&p)
+			log.Fatal(err)
+		}
+
+		if err := runUserCommands(action.name, p.commands); err != nil {
 			cleanupOnFailure(&p)
 			log.Fatal(err)
 		}
 	}
 
 	fmt.Println("Laravel project scaffolding complete!")
-	os.Exit(0)
 }
 
-func actions() []func(p *project) error {
-	return []func(p *project) error{
-		handleStarterSelection,
-		handleCreateProject,
-		handleAuthJSON,
-		handlePreCleanUp,
-		handleGitignore,
-		handlePHPDeps,
-		handleJSDeps,
-		handlePublishFiles,
-		handleUserCommands,
+func actions() []action {
+	return []action{
+		{name: "select_starter", callback: handleStarterSelection, hooks: false},
+		{name: "create_project", callback: handleCreateProject, hooks: true},
+		{name: "create_auth_json", callback: handleAuthJSON, hooks: false},
+		{name: "clean_up", callback: handleCleanUp, hooks: false},
+		{name: "composer_install", callback: handlePHPDeps, hooks: true},
+		{name: "npm_install", callback: handleJSDeps, hooks: true},
+		{name: "publish_files", callback: handlePublishFiles, hooks: true},
+		{name: "run_user_commands", callback: handleUserCommands, hooks: false},
 	}
+}
+
+func hooks() []string {
+	hooks := []string{}
+	for _, action := range actions() {
+		if action.hooks {
+			hooks = append(hooks, action.name)
+		}
+	}
+	return hooks
 }
 
 func cleanupOnFailure(p *project) error {
@@ -142,7 +171,6 @@ func printConfig(starter string) error {
 func printFileTree(starter string) error {
 	basePath := filepath.Join("starters", starter)
 
-	// TODO: fix tree structure
 	err := fs.WalkDir(starters, basePath, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err

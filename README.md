@@ -132,7 +132,7 @@ Write tests—and then write more tests. Improve command validation. Define a sc
 - [x] Handle multiple private repos and auth.json credentials
 - [x] Support commandline args for selecting a specific "starter"
 - [x] Allow viewing a starter's config and file tree via commandline args
-- [x] Support arbitrary commands for things like /vendor script execution during install (in-progress)
+- [x] Support arbitrary commands for things like /vendor script execution during install
 - [ ] Expose hooks in config.json to allow commands to be executed at specific stages in the the installation process
 - [ ] Build a TUI for inspecting installed starters, their config, and embeded file systems accessible via commandline flag
 - [ ] Allow the injection of code snippets into a specifically targeted file, closure, or array
