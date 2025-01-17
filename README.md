@@ -1,6 +1,12 @@
 # Sourdough 🍞
 ## A Customizable Laravel Installer/Starter Kit
 
+If you're like me, you have a set of dependencies, configuration files, helpers, or whatever else you just HAVE to have in your new Laravel projects. This tool aims to make it easy to create a new Laravel project with the right dependencies, configuration, and other files in place - and it's completely customizable.
+
+Already have a favorite starter-kit? You can install and extend it with this tool.
+
+Configure it once, use it over and over again.
+
 > [!WARNING]
 > This was created primarily for personal use - I won't necessarily make changes based on your feedback unless it's an egregious bug or security issue.
 > The installer and the default "starter" are works-in-progress and may contain bugs.
@@ -44,27 +50,22 @@ The default "flux" starter will install Livewire, Volt, Folio, Flux and Flux Pro
 
 ```json
 {
+    "$schema": "../../config-schema.json",
+    "remove_files": ["resources/views/welcome.blade.php", "resources/js/bootstrap.js"],
+    "repos": [],
     "php": {
-        "prod": ["laravel/folio", "livewire/livewire", "livewire/volt", "livewire/flux", "livewire/flux-pro"],
+        "prod": ["livewire/livewire", "livewire/volt", "laravel/folio"],
         "dev": ["wire-elements/wire-spy"],
-        "remove":[]
+        "remove": []
     },
     "js": {
         "prod": [],
-        "dev": ["prettier", "prettier-plugin-blade", "@tailwindcss/typography"],
-        "remove": []
+        "dev": ["prettier", "prettier-plugin-blade", "@tailwindcss/typography", "@tailwindcss/forms"],
+        "remove": ["axios"]
     },
-    "repos": [
-        {
-            "name": "flux-pro",
-            "url": "composer.fluxui.dev",
-            "auth": true
-        }
-    ],
     "artisan": ["folio:install", "volt:install"],
     "npx": [],
-    "commands": [],
-    "remove_files": ["resources/views/welcome.blade.php"]
+    "commands": ["git init", "git add .", "quiet:git commit -m \"initial\"", "quiet:./vendor/bin/pint"]
 }
 ```
 
@@ -109,7 +110,15 @@ Quiet mode ("quiet:") will not produce any output.
 Interactive ("interact:") mode will allow you to interact with any cli as you normally would.
 Normal mode (the default - no prefix) simply echos the output without any prompts - this may cause issues with some CLIs that require user interaction.
 
-Note: I plan to introduce lifecycle hooks to allow execution at specific points in the installation process - so the config.json "api" for this feature is likely to change or be expanded on in some form - see the "road to stability" section below.
+## Hooks
+
+You can use the -hooks flag to view the available hooks for user defined commands.
+
+```bash
+sourdough -hooks
+```
+
+Hooks execute after the action referenced in the hook name. Usage: `@hook_name:command_name args` in the commands array of the config.json.
 
 ## Inspect Starter(s) after compiling the executable
 
@@ -129,16 +138,19 @@ Write tests—and then write more tests. Improve command validation. Define a sc
 ## Planned Features
 
 - [x] Support multiple "starters" (read: starter-kits)
+- [ ] Support pulling "starters" from a git repo as well as the embedded filesystem (?)
 - [x] Handle multiple private repos and auth.json credentials
 - [x] Support commandline args for selecting a specific "starter"
 - [x] Allow viewing a starter's config and file tree via commandline args
 - [x] Support arbitrary commands for things like /vendor script execution during install
-- [ ] Expose hooks in config.json to allow commands to be executed at specific stages in the the installation process
-- [ ] Build a TUI for inspecting installed starters, their config, and embeded file systems accessible via commandline flag
+- [x] Expose hooks in config.json to allow commands to be executed at specific stages in the the installation process
+- [ ] Add a "source" field to the config.json to optionally pull a starter-template from a git repo instead of using the installer (in progress)
 - [ ] Allow the injection of code snippets into a specifically targeted file, closure, or array
-- [ ] Make user commands "optional:" by showing a prompt before execution & parse multiple prefix-options like "optional:interact:command"
+- [ ] Build a TUI for inspecting installed starters, their config, and embeded file systems accessible via commandline flag
 
-- [ ] ~~Add a Svelte-Inertia starter~~ (cancelled - for now)
+### Stretch Goals:
+- [ ] Make commands "optional:" by showing a prompt before execution & parse multiple prefix-options like "optional:interact:command"
+- [ ] ~~Add a Svelte-Inertia starter~~ (on hold)
 
 ## FAQ
 
