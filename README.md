@@ -110,7 +110,7 @@ Quiet mode ("quiet:") will not produce any output.
 Interactive ("interact:") mode will allow you to interact with any cli as you normally would.
 Normal mode (the default - no prefix) simply echos the output without any prompts - this may cause issues with some CLIs that require user interaction.
 
-The "--shout" flag will override the "quiet:" and force output to be displayed (useful for debugging).
+The "--shout" flag will override the "quiet:" and forces output to be displayed (useful for debugging).
 
 ```bash
 sourdough --shout
