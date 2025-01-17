@@ -21,19 +21,27 @@ type action struct {
 //go:embed all:starters/*
 var starters embed.FS
 
+var SHOUT bool
+
 func main() {
 	var hooksFlag bool
 
 	flag.BoolVar(&hooksFlag, "hooks", false, "Output the available command hooks and exit")
+	flag.BoolVar(&SHOUT, "shout", false, "Overrides \":quiet\" when running cli commands")
+
 	configFlag := flag.String("config", "", "Output the embeded config file for the specified kit and exit")
 	treeFlag := flag.String("tree", "", "Output the embeded file tree for the specified kit and exit")
 
 	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s project_name \n", os.Args[0])
+		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [options] project_name \n", os.Args[0])
 		fmt.Fprintf(flag.CommandLine.Output(), "\nFlags:\n")
 		flag.PrintDefaults()
 	}
 	flag.Parse()
+
+	if SHOUT {
+		fmt.Println("Shout mode enabled!")
+	}
 
 	if *configFlag != "" {
 		if err := printConfig(*configFlag); err != nil {
@@ -119,7 +127,7 @@ func hooks() []string {
 }
 
 func cleanupOnFailure(p *project) error {
-	fmt.Println("Cleaning up...")
+	fmt.Println("An error occurred! Cleaning up...")
 	if _, err := os.Stat(p.pdir); err == nil {
 		if err := os.RemoveAll(p.pdir); err != nil {
 			return fmt.Errorf("failed to cleanup directory: %w", err)

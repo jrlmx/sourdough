@@ -7,7 +7,9 @@ import (
 
 func handleJSDeps(p *project) error {
 	fmt.Println("Installing node dependencies...")
+
 	prod := p.config.JS.Prod
+
 	if err := runCommand("npm", QuietMode, append([]string{"install", "--no-package-lock"}, prod...)...); err != nil {
 		return fmt.Errorf("failed to add node dependencies to package.json (prod): %w", err)
 	}

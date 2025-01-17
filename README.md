@@ -110,6 +110,8 @@ Quiet mode ("quiet:") will not produce any output.
 Interactive ("interact:") mode will allow you to interact with any cli as you normally would.
 Normal mode (the default - no prefix) simply echos the output without any prompts - this may cause issues with some CLIs that require user interaction.
 
+The -shout flag will override the "quiet:" and force output to be displayed (useful for debugging).
+
 ## Hooks
 
 You can use the -hooks flag to view the available hooks for user defined commands.
@@ -138,13 +140,13 @@ Write tests—and then write more tests. Improve command validation. Define a sc
 ## Planned Features
 
 - [x] Support multiple "starters" (read: starter-kits)
-- [ ] Support pulling "starters" from a git repo as well as the embedded filesystem (?)
+- [ ] Support pulling "starters" from a git repo as well or in place of the embedded filesystem (?)
 - [x] Handle multiple private repos and auth.json credentials
 - [x] Support commandline args for selecting a specific "starter"
 - [x] Allow viewing a starter's config and file tree via commandline args
 - [x] Support arbitrary commands for things like /vendor script execution during install
 - [x] Expose hooks in config.json to allow commands to be executed at specific stages in the the installation process
-- [ ] Add a "source" field to the config.json to optionally pull a starter-template from a git repo instead of using the installer (in progress)
+- [x] Add a "git_url" field to the config.json to optionally pull from a git repo instead of using the laravel installer (in progress)
 - [ ] Allow the injection of code snippets into a specifically targeted file, closure, or array
 - [ ] Build a TUI for inspecting installed starters, their config, and embeded file systems accessible via commandline flag
 

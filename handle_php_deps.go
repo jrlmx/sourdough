@@ -19,11 +19,12 @@ func handlePHPDeps(p *project) error {
 	}
 
 	dev := p.config.PHP.Dev
+
 	if err := runCommand("composer", QuietMode, append([]string{"require", "--dev", "--no-update"}, dev...)...); err != nil {
 		return fmt.Errorf("failed to add composer dependencies to composer.json (dev): %w", err)
 	}
 
-	if err := runCommand("composer", QuietMode, "update"); err != nil {
+	if err := runCommand("composer", NormalMode, "update", "--no-scripts", "--no-interaction"); err != nil {
 		return fmt.Errorf("failed to update composer dependencies: %w", err)
 	}
 

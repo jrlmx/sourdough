@@ -20,7 +20,7 @@ const (
 
 func runCommand(cname string, mode runMode, cargs ...string) error {
 	cmd := exec.Command(cname, cargs...)
-	if mode != QuietMode {
+	if SHOUT || mode != QuietMode {
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 	}

@@ -7,6 +7,7 @@ import (
 )
 
 type Config struct {
+	GitURL   string          `json:"git_url"`
 	PHP      PackageManifest `json:"php"`
 	JS       PackageManifest `json:"js"`
 	Files    []string        `json:"remove_files"`
