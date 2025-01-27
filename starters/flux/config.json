@@ -1,20 +1,25 @@
 {
     "$schema": "../../config-schema.json",
+    "template": "",
     "remove_files": ["resources/views/welcome.blade.php"],
-    "php": {
-        "prod": ["laravel/folio", "livewire/livewire", "livewire/volt", "livewire/flux", "livewire/flux-pro"],
-        "dev": ["wire-elements/wire-spy"]
+    "composer": {
+        "production": ["laravel/folio", "livewire/livewire", "livewire/volt", "livewire/flux", "livewire/flux-pro"],
+        "development": ["wire-elements/wire-spy"],
+        "remove": [],
+        "repositories": [
+            {
+                "name": "flux-pro",
+                "url": "composer.fluxui.dev",
+                "auth": true
+            }
+        ]
     },
-    "js": {
-        "dev": ["prettier", "prettier-plugin-blade", "@tailwindcss/typography"]
+    "npm": {
+        "production": [],
+        "development": ["prettier", "prettier-plugin-blade", "@tailwindcss/typography"],
+        "remove": []
     },
-    "repos": [
-        {
-            "name": "flux-pro",
-            "url": "composer.fluxui.dev",
-            "auth": true
-        }
-    ],
-    "artisan": ["folio:install", "volt:install"],
+    "npx_commands": [],
+    "artisan_commands": ["folio:install", "volt:install"],
     "commands": ["git init", "git add .", "git commit -m \"initial\"", "./vendor/bin/pint"]
 }
