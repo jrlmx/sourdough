@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 )
 
-func publishFilesAction(c *config) error {
-	stubs := filepath.Join(c.starter.dir, "stubs")
+func publishFilesAction(cfg *config) error {
+	stubs := filepath.Join(cfg.starter.dir, "stubs")
 	info, err := os.Stat(stubs)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
@@ -32,7 +32,7 @@ func publishFilesAction(c *config) error {
 		}
 
 		src := filepath.Join(stubs, path)
-		dest := filepath.Join(c.project.dir, path)
+		dest := filepath.Join(cfg.project.dir, path)
 		if err := os.MkdirAll(filepath.Dir(dest), os.ModePerm); err != nil {
 			return fmt.Errorf("error creating directory: %w", err)
 		}

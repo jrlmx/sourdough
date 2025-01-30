@@ -18,9 +18,9 @@ type HTTPBasicCredentials struct {
 	Password string `json:"password"`
 }
 
-func createAuthJsonAction(c *config) error {
+func createAuthJsonAction(cfg *config) error {
 	var reposWithAuth []repo
-	for _, repo := range *c.starter.composer.repos {
+	for _, repo := range *cfg.starter.composer.repos {
 		if repo.auth {
 			reposWithAuth = append(reposWithAuth, repo)
 		}
