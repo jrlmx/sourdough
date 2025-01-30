@@ -20,14 +20,13 @@ Configure it once, use it over and over again...
 ### Prerequisites
 
 - PHP
-- Composer
-- Laravel Installer (currently)
-- Node/NPM
-- Go (for compilation)
+- Composer, Laravel Installer (currently) (goto: [laravel.com](https://laravel.com/docs/11.x#installing-php))
+- Node/NPM (goto: [webinstall.dev](https://webinstall.dev/node/))
+- Go (for compilation) (goto: [webinstall.dev](https://webinstall.dev/golang/))
 - A [Flux Pro](https://fluxui.dev/pricing) license (for default starter)
 
 > [!TIP]
-> **Don't have Go installed?** It's really easy with [webinstall.dev](https://webinstall.dev/golang/)
+> **Don't have Go installed?** It's really easy with
 
 ## Usage
 
@@ -116,8 +115,6 @@ sourdough --hooks
 Hooks execute after the action referenced in the hook name. Usage: `@hook_name:command_name args` in the commands array of the config.json.
 
 ## Road to somekind of stability...
-
-Ensure user derived starters are not overwritten when updating the repository. Considering moving the flux starter into it's own repo and leaving the example starter as boilerplate.
 
 Write tests—and then write more tests. Improve command validation. Define a schema for config.json once its structure is finalized. Etc...
 
