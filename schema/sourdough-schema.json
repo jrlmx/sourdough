@@ -1,0 +1,20 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://jrlmx.com/projects/sourdough/sourdough-schema.json",
+    "title": "Sourdough Schema",
+    "description": "Schema for the Sourdough configuration file.",
+    "type": "object",
+    "properties": {
+        "starters": {
+            "type": "object",
+            "description": "A map of starter names to their (GitHub) URLs.",
+            "additionalProperties": {
+                "type": "string",
+                "format": "uri"
+            }
+        }
+    },
+    "required": [
+        "starters"
+    ]
+}

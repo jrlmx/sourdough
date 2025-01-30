@@ -16,4 +16,6 @@ cache/
 /.prettierrc
 
 sourdough
-/test/
+new_starters/
+starters/
+test/

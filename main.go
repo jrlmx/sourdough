@@ -1,210 +1,287 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
-	"io/fs"
 	"log"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"strings"
+
+	"github.com/charmbracelet/huh"
 )
 
-type action struct {
-	name     string
-	hooks    bool
-	callback func(p *project) error
+//go:embed config.json
+var fsys embed.FS
+
+type CliOptions struct {
+	projectName string
+	starterName string
+	printHooks  bool
 }
 
-//go:embed all:starters/*
-var starters embed.FS
-
-var SHOUT bool
-
-func main() {
-	var hooksFlag bool
-
-	flag.BoolVar(&hooksFlag, "hooks", false, "Output the available command hooks and exit")
-	flag.BoolVar(&SHOUT, "shout", false, "Overrides \":quiet\" when running cli commands")
-
-	configFlag := flag.String("config", "", "Output the embeded config file for the specified kit and exit")
-	treeFlag := flag.String("tree", "", "Output the embeded file tree for the specified kit and exit")
-
-	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [options] project_name \n", os.Args[0])
-		fmt.Fprintf(flag.CommandLine.Output(), "\nFlags:\n")
-		flag.PrintDefaults()
-	}
-	flag.Parse()
-
-	if SHOUT {
-		fmt.Println("Shout mode enabled!")
-	}
-
-	if *configFlag != "" {
-		if err := printConfig(*configFlag); err != nil {
-			log.Fatal(err)
-		}
-		os.Exit(0)
-	}
-
-	if *treeFlag != "" {
-		if err := printFileTree(*treeFlag); err != nil {
-			log.Fatal(err)
-		}
-		os.Exit(0)
-	}
-
-	if hooksFlag {
-		for _, hook := range hooks() {
-			fmt.Println(hook)
-		}
-		os.Exit(0)
-	}
-
-	var name string
-	args := flag.Args()
-	if len(args) < 1 {
-		log.Fatalf("Usage: %s [project_name]\n", os.Args[0])
-	}
-	name = args[0]
-
-	if _, err := os.Stat(name); err == nil {
-		log.Fatalf("project directory already exists: %s", name)
-	}
-	cleaned := cleanDirName(name)
-
-	wdir, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	pdir := filepath.Join(wdir, cleaned)
-	p := newProject(cleaned, pdir, hooks())
-
-	if err := checkSystemDeps(); err != nil {
-		log.Fatal(err)
-	}
-
-	for _, action := range actions() {
-		if err := action.callback(&p); err != nil {
-			cleanupOnFailure(&p)
-			log.Fatal(err)
-		}
-
-		if err := runUserCommands(action.name, p.commands); err != nil {
-			cleanupOnFailure(&p)
-			log.Fatal(err)
-		}
-	}
-
-	fmt.Println("Laravel project scaffolding complete!")
+type CleanUpTask struct {
+	task      func() error
+	onSuccess bool
 }
 
-func actions() []action {
-	return []action{
-		{name: "select_starter", callback: handleStarterSelection, hooks: false},
-		{name: "create_project", callback: handleCreateProject, hooks: true},
-		{name: "create_auth_json", callback: handleAuthJSON, hooks: false},
-		{name: "clean_up", callback: handleCleanUp, hooks: false},
-		{name: "composer_install", callback: handlePHPDeps, hooks: true},
-		{name: "npm_install", callback: handleJSDeps, hooks: true},
-		{name: "publish_files", callback: handlePublishFiles, hooks: true},
-		{name: "run_user_commands", callback: handleUserCommands, hooks: false},
+type CleanUpManager struct {
+	tasks []CleanUpTask
+}
+
+func (cm *CleanUpManager) addTask(task func() error, onSuccess bool) {
+	cm.tasks = append(cm.tasks, CleanUpTask{task, onSuccess})
+}
+
+func (cm *CleanUpManager) cleanUp(success bool) {
+	for _, task := range cm.tasks {
+		if success && !task.onSuccess {
+			continue
+		}
+		if err := task.task(); err != nil {
+			fmt.Println(err)
+		}
 	}
 }
 
-func hooks() []string {
-	hooks := []string{}
-	for _, action := range actions() {
-		if action.hooks {
-			hooks = append(hooks, action.name)
+func NewCleanUpManager() *CleanUpManager {
+	return &CleanUpManager{
+		tasks: []CleanUpTask{},
+	}
+}
+
+func getActions() []Action {
+	return []Action{
+		{name: "create_project", hookable: false, callback: createProjectAction},
+		{name: "create_auth_json", hookable: false, callback: createAuthJsonAction},
+		{name: "remove_files", hookable: false, callback: removeFilesAction},
+		{name: "composer_install", hookable: true, callback: composerInstallAction},
+		{name: "npm_install", hookable: true, callback: npmInstallAction},
+		{name: "publish_files", hookable: true, callback: publishFilesAction},
+		{name: "run_commands", hookable: false, callback: runCommandsAction},
+	}
+}
+
+func getHooks() []string {
+	var hooks []string
+	for _, a := range getActions() {
+		if a.hookable {
+			hooks = append(hooks, a.name)
 		}
 	}
 	return hooks
 }
 
-func cleanupOnFailure(p *project) error {
-	fmt.Println("An error occurred! Cleaning up...")
-	if _, err := os.Stat(p.pdir); err == nil {
-		if err := os.RemoveAll(p.pdir); err != nil {
-			return fmt.Errorf("failed to cleanup directory: %w", err)
+func main() {
+	cliOpts := getCliOptions()
+
+	if cliOpts.printHooks {
+		fmt.Println("Available command hooks:")
+		for _, hook := range getHooks() {
+			fmt.Println(hook)
 		}
+		fmt.Println("Note: hooks execute after the specified action")
+		os.Exit(0)
 	}
-	return nil
+
+	sc := make(chan os.Signal, 1)
+	ec := make(chan error, 1)
+	signal.Notify(sc, os.Interrupt)
+	ctx, cancel := context.WithCancel(context.Background())
+
+	wd, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+	cfg := config{
+		args:    cliOpts,
+		project: &project{},
+		starter: &starter{},
+		wd:      wd,
+	}
+
+	go func() {
+		if err := run(&cfg); err != nil {
+			ec <- err
+		}
+		cancel()
+	}()
+
+	select {
+	case <-sc:
+		fmt.Printf("Interrupted")
+		cfg.cm.cleanUp(false)
+	case err := <-ec:
+		fmt.Println(err)
+		cfg.cm.cleanUp(false)
+	case <-ctx.Done():
+		fmt.Println("Done")
+		cfg.cm.cleanUp(true)
+	}
+	cancel()
 }
 
-func checkSystemDeps() error {
-	deps := []string{
-		"php",
-		"laravel",
-		"composer",
-		"npm",
-	}
-
-	for _, dep := range deps {
-		path, err := isInstalled(dep)
-		if err != nil {
-			return err
-		}
-		fmt.Printf("Using %s: %s\n", dep, path)
-	}
-
-	return nil
-}
-
-func printConfig(starter string) error {
-	data, err := starters.ReadFile("starters/" + starter + "/config.json")
+func run(cfg *config) error {
+	// Get the sourdough config
+	sdConfig, err := getSourdoughConfig()
 	if err != nil {
 		return err
 	}
-
-	var config Config
-
-	if err := json.Unmarshal(data, &config); err != nil {
-		return err
-	}
-
-	prettyPrinted, err := json.MarshalIndent(config, "", "    ")
+	// Name the project
+	err = cfg.makeProject(cfg.args.projectName)
 	if err != nil {
 		return err
 	}
-
-	fmt.Println(string(prettyPrinted))
+	// Select a starter
+	err = cfg.makeStarter(cfg.args.starterName, sdConfig.Starters)
+	if err != nil {
+		return err
+	}
+	// Ensure config project and starter are set
+	if cfg.project == nil || cfg.starter == nil {
+		return errors.New("project or starter is nil")
+	}
+	// Run the actions
+	for _, a := range getActions() {
+		if err := a.callback(cfg); err != nil {
+			return err
+		}
+		if _, ok := cfg.starter.commands[a.name]; ok {
+			for _, cmd := range cfg.starter.commands[a.name] {
+				if err := cmd.run(); err != nil {
+					return err
+				}
+			}
+		}
+	}
 	return nil
 }
 
-func printFileTree(starter string) error {
-	basePath := filepath.Join("starters", starter)
+func getCliOptions() CliOptions {
+	var projectName string
+	var starterName string
+	var printHooks bool
 
-	err := fs.WalkDir(starters, basePath, func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
+	flag.StringVar(&starterName, "starter", "", "Name of the starter")
+	flag.BoolVar(&printHooks, "hooks", false, "Print available hooks")
+	flag.Parse()
+
+	if len(flag.Args()) > 0 {
+		projectName = flag.Args()[0]
+	}
+
+	return CliOptions{
+		projectName: projectName,
+		starterName: starterName,
+	}
+}
+
+func getSourdoughConfig() (SourdoughConfig, error) {
+	file, err := fsys.ReadFile("config.json")
+	if err != nil {
+		return SourdoughConfig{}, fmt.Errorf("error reading config.json: %w", err)
+	}
+	var cfg SourdoughConfig
+	if err := json.Unmarshal(file, &cfg); err != nil {
+		return SourdoughConfig{}, fmt.Errorf("error parsing config.json: %w", err)
+	}
+	if len(cfg.Starters) < 1 {
+		return SourdoughConfig{}, errors.New("no starters found in config.json")
+	}
+	return cfg, err
+}
+
+func (cfg *config) makeProject(name string) error {
+	cleaned := strings.TrimSpace(name)
+	isValid := func(s string) error {
+		if s == "" {
+			return errors.New("project name cannot be empty")
 		}
-
-		relativePath := strings.TrimPrefix(path, basePath)
-		depth := strings.Count(relativePath, "/")
-		indent := strings.Repeat("    ", depth)
-
-		if path == basePath {
-			fmt.Printf("%s/\n", filepath.Base(basePath))
-			return nil
+		if len(s) < 1 || len(name) >= 60 {
+			return errors.New("project name must be between 1 and 60 characters")
 		}
-
-		if d.IsDir() {
-			fmt.Printf("%s├── %s/\n", indent, filepath.Base(path))
-		} else {
-			fmt.Printf("%s├── %s\n", indent, d.Name())
+		if strings.ContainsAny(s, "&;|<>(){}$`\\/.") {
+			return errors.New("project name contains invalid characters")
 		}
-
 		return nil
-	})
-
-	if err != nil {
-		return err
 	}
+	if cleaned == "" || isValid(cleaned) != nil {
+		if err := huh.NewInput().
+			Title("Name your project").
+			Value(&cleaned).
+			Validate(isValid).
+			Run(); err != nil {
+			return fmt.Errorf("error naming project '%s': %w", cleaned, err)
+		}
+	}
+	dir := filepath.Join(cfg.wd, cleaned)
+	// Ensure the project directory does not already exist
+	if _, err := os.Stat(dir); err == nil {
+		return errors.New("project directory already exists")
+	}
+	cfg.project = &project{
+		name: cleaned,
+		dir:  dir,
+	}
+	return nil
+}
 
+func (cfg *config) makeStarter(name string, options map[string]string) error {
+	cleaned := strings.TrimSpace(name)
+	isValid := func(s string) error {
+		if s == "" {
+			return errors.New("starter name cannot be empty")
+		}
+		if _, ok := options[s]; !ok {
+			return errors.New("starter name not found in config.starters")
+		}
+		return nil
+	}
+	if cleaned == "" || isValid(cleaned) != nil {
+		selectOptions := []huh.Option[string]{}
+		for key := range options {
+			selectOptions = append(selectOptions, huh.NewOption(key, key))
+		}
+		if err := huh.NewSelect[string]().
+			Options(selectOptions...).
+			Title("Select a starter").
+			Value(&cleaned).
+			Validate(isValid).
+			Run(); err != nil {
+			return fmt.Errorf("error selecting starter '%s': %w", cleaned, err)
+		}
+	}
+	// Create a temp directory for the starter
+	dir, err := os.MkdirTemp(cfg.wd, "sd-tmp-")
+	if err != nil {
+		return fmt.Errorf("error creating temp directory for starter '%s': %w", cleaned, err)
+	}
+	cfg.cm.addTask(func() error {
+		return os.RemoveAll(dir)
+	}, true)
+	// Clone the git repo into the temp directory
+	if err := runCommand("git", []string{"clone", options[cleaned], dir}, QuietMode); err != nil {
+		return fmt.Errorf("error cloning starter '%s': %w", cleaned, err)
+	}
+	// Parse the starter config
+	var configJson StarterConfigJson
+	file, err := os.ReadFile(filepath.Join(dir, "config.json"))
+	if err != nil {
+		return fmt.Errorf("error reading starter config '%s': %w", cleaned, err)
+	}
+	if err := json.Unmarshal(file, &configJson); err != nil {
+		return fmt.Errorf("error parsing starter config '%s': %w", cleaned, err)
+	}
+	// Create the starter
+	starter, err := configJson.parse(cleaned, dir)
+	if err != nil {
+		return fmt.Errorf("error creating starter '%s': %w", cleaned, err)
+	}
+	cfg.starter = &starter
 	return nil
 }
