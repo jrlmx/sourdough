@@ -1,6 +1,5 @@
 {
     "starters": {
-        "jrlmx/example-starter": "/home/jrlmx/workspace/github.com/jrlmx/somthing/starters/example/.git",
         "jrlmx/flux-starter": "https://github.com/jrlmx/flux-starter.git"
     }
 }

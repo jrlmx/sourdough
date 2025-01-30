@@ -2,9 +2,7 @@
 ## A Customizable Laravel Installer/Starter Kit
 
 If you're like me, you have a set of dependencies, configuration files, helpers, or whatever else you just HAVE to have in your new Laravel projects. This tool aims to make it easy to create a new Laravel project with the right dependencies, configuration, and other files in place - and it's completely customizable.
-
-Already have a favorite starter-kit? The tool will install - or clone - and extend it with your custom configuration.
-
+Already have a favorite starter-kit? The tool will install - or clone the repo - and extend it with your custom configuration.
 Configure it once, use it over and over again...
 
 > [!WARNING]
@@ -19,8 +17,7 @@ Configure it once, use it over and over again...
 
 ### Prerequisites
 
-- PHP
-- Composer, Laravel Installer (currently) (goto: [laravel.com](https://laravel.com/docs/11.x#installing-php))
+- PHP, Composer, Laravel Installer (currently) (goto: [laravel.com](https://laravel.com/docs/11.x#installing-php))
 - Node/NPM (goto: [webinstall.dev](https://webinstall.dev/node/))
 - Go (for compilation) (goto: [webinstall.dev](https://webinstall.dev/golang/))
 - A [Flux Pro](https://fluxui.dev/pricing) license (for default starter)
