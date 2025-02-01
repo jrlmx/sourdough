@@ -31,11 +31,11 @@ type StarterConfigJson struct {
 }
 
 type config struct {
-	args    CliOptions
+	args    cliOptions
 	wd      string
 	project *project
 	starter *starter
-	cm      CleanUpManager
+	cm      cleanUpManager
 }
 
 type project struct {

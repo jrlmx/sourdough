@@ -19,40 +19,10 @@ import (
 //go:embed config.json
 var fsys embed.FS
 
-type CliOptions struct {
+type cliOptions struct {
 	projectName string
 	starterName string
 	printHooks  bool
-}
-
-type CleanUpTask struct {
-	task      func() error
-	onSuccess bool
-}
-
-type CleanUpManager struct {
-	tasks []CleanUpTask
-}
-
-func (cm *CleanUpManager) addTask(task func() error, onSuccess bool) {
-	cm.tasks = append(cm.tasks, CleanUpTask{task, onSuccess})
-}
-
-func (cm *CleanUpManager) cleanUp(success bool) {
-	for _, task := range cm.tasks {
-		if success && !task.onSuccess {
-			continue
-		}
-		if err := task.task(); err != nil {
-			fmt.Println(err)
-		}
-	}
-}
-
-func NewCleanUpManager() *CleanUpManager {
-	return &CleanUpManager{
-		tasks: []CleanUpTask{},
-	}
 }
 
 func getActions() []Action {
@@ -133,12 +103,12 @@ func run(cfg *config) error {
 		return err
 	}
 	// Name the project
-	err = cfg.makeProject(cfg.args.projectName)
+	err = cfg.createProjectConfig(cfg.args.projectName)
 	if err != nil {
 		return err
 	}
 	// Select a starter
-	err = cfg.makeStarter(cfg.args.starterName, sdConfig.Starters)
+	err = cfg.createStarterConfig(cfg.args.starterName, sdConfig.Starters)
 	if err != nil {
 		return err
 	}
@@ -162,7 +132,7 @@ func run(cfg *config) error {
 	return nil
 }
 
-func getCliOptions() CliOptions {
+func getCliOptions() cliOptions {
 	var projectName string
 	var starterName string
 	var printHooks bool
@@ -175,7 +145,7 @@ func getCliOptions() CliOptions {
 		projectName = flag.Args()[0]
 	}
 
-	return CliOptions{
+	return cliOptions{
 		projectName: projectName,
 		starterName: starterName,
 	}
@@ -196,7 +166,7 @@ func getSourdoughConfig() (SourdoughConfig, error) {
 	return cfg, err
 }
 
-func (cfg *config) makeProject(name string) error {
+func (cfg *config) createProjectConfig(name string) error {
 	cleaned := strings.TrimSpace(name)
 	isValid := func(s string) error {
 		if s == "" {
@@ -231,7 +201,7 @@ func (cfg *config) makeProject(name string) error {
 	return nil
 }
 
-func (cfg *config) makeStarter(name string, options map[string]string) error {
+func (cfg *config) createStarterConfig(name string, options map[string]string) error {
 	cleaned := strings.TrimSpace(name)
 	isValid := func(s string) error {
 		if s == "" {
