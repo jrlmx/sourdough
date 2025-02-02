@@ -43,8 +43,8 @@ func (c *command) validate() error {
 	if strings.Contains(c.name, "..") {
 		return fmt.Errorf("command should not ascend directories: %s", c.name)
 	}
-	if strings.ContainsAny(c.name+strings.Join(c.args, ""), "&;|<>(){}$`\\") {
-		return fmt.Errorf("command contains invalid characters: %s", c.name)
+	if strings.ContainsAny(c.name+strings.Join(c.args, ""), "&;|<>(){}$`") {
+		return fmt.Errorf("command contains invalid characters: %s [%s]", c.name, c.args)
 	}
 	if !slices.ContainsFunc([]string{
 		"php",
