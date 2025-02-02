@@ -183,6 +183,6 @@ The ability to inject code snippets into a specific file, class, or clossure - u
 
 Well, it's not speed, Sourdough utilizes a number of other cli-tools to do what it does, which creates a performance bottleneck - so that complicates the whole "go is faster" argument.
 
-Go applications compile to a single binary, which makes it very portable, and while PHP applications can be Frankensteined into an executable - it's just not as straight-forward for my use case. Go is also very easy to install using the [webi](https://webinstall.dev)... can't reccomend webi enough, especially if like me you have to spin up a new development environment fairly often.
+Go applications compile to a single binary, which makes it very portable, and while PHP applications can be Frankensteined into an executable - it's just not as straight-forward for my use case.
 
 Why not write web applications in Go? I like to have my batteries included.

@@ -90,8 +90,6 @@ func (sj *StarterConfigJson) parse(name, dir string) (starter, error) {
 		})
 	}
 
-	fmt.Print(sj.Flags)
-
 	return starter{
 		name:     name,
 		dir:      dir,
