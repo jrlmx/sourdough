@@ -5,7 +5,7 @@ import "fmt"
 func composerInstallAction(cfg *config) error {
 	fmt.Println("Adding composer repositories...")
 	for _, repo := range *cfg.starter.composer.repos {
-		if err := runCommand("composer", []string{"config", "repositories." + repo.name, "composer", "https://" + repo.url}, NormalMode); err != nil {
+		if err := runCommand("composer", []string{"config", "repositories." + repo.name, "composer", "https://" + repo.url}, InteractiveMode); err != nil {
 			return fmt.Errorf("error adding composer repository: %w", err)
 		}
 	}

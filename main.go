@@ -2,10 +2,8 @@ package main
 
 import (
 	"context"
-	"embed"
 	"encoding/json"
 	"errors"
-	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -16,19 +14,10 @@ import (
 	"github.com/charmbracelet/huh"
 )
 
-//go:embed config.json
-var fsys embed.FS
-
-type cliOptions struct {
-	projectName string
-	starterName string
-	printHooks  bool
-}
-
 func getActions() []Action {
 	return []Action{
-		{name: "create_project", hookable: false, callback: createProjectAction},
 		{name: "create_auth_json", hookable: false, callback: createAuthJsonAction},
+		{name: "create_project", hookable: false, callback: createProjectAction},
 		{name: "remove_files", hookable: false, callback: removeFilesAction},
 		{name: "composer_install", hookable: true, callback: composerInstallAction},
 		{name: "npm_install", hookable: true, callback: npmInstallAction},
@@ -50,14 +39,7 @@ func getHooks() []string {
 func main() {
 	cliOpts := getCliOptions()
 
-	if cliOpts.printHooks {
-		fmt.Println("Available command hooks:")
-		for _, hook := range getHooks() {
-			fmt.Println(hook)
-		}
-		fmt.Println("Note: hooks execute after the specified action")
-		os.Exit(0)
-	}
+	handleSubCommands(&cliOpts)
 
 	sc := make(chan os.Signal, 1)
 	ec := make(chan error, 1)
@@ -132,38 +114,75 @@ func run(cfg *config) error {
 	return nil
 }
 
-func getCliOptions() cliOptions {
-	var projectName string
-	var starterName string
-	var printHooks bool
-
-	flag.StringVar(&starterName, "starter", "", "Name of the starter")
-	flag.BoolVar(&printHooks, "hooks", false, "Print available hooks")
-	flag.Parse()
-
-	if len(flag.Args()) > 0 {
-		projectName = flag.Args()[0]
+func handleSubCommands(cliOpts *cliOptions) {
+	if cliOpts.printHooks {
+		fmt.Println("Available command hooks:")
+		for _, hook := range getHooks() {
+			fmt.Println(hook)
+		}
+		fmt.Println("Note: hooks execute after the specified action")
+		os.Exit(0)
 	}
 
-	return cliOptions{
-		projectName: projectName,
-		starterName: starterName,
+	if cliOpts.addStarter {
+		if err := addNewStarter(); err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("Starter added successfully - run 'sourdough' again to use it\n")
+		os.Exit(0)
+	}
+
+	if cliOpts.removeStarter != "" {
+		if err := removeStarter(cliOpts.removeStarter); err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("Starter removed successfully\n")
+		os.Exit(0)
+	}
+
+	if cliOpts.exportStarters {
+		sdConfig, err := getSourdoughConfig()
+		if err != nil {
+			log.Fatal(err)
+		}
+		if err := exportStarters(sdConfig); err != nil {
+			log.Fatal(err)
+		}
+		os.Exit(0)
+	}
+
+	if cliOpts.importStarters != "" {
+		if err := importStarters(cliOpts.importStarters); err != nil {
+			log.Fatal(err)
+		}
+		os.Exit(0)
 	}
 }
 
 func getSourdoughConfig() (SourdoughConfig, error) {
-	file, err := fsys.ReadFile("config.json")
+	db, err := database()
 	if err != nil {
-		return SourdoughConfig{}, fmt.Errorf("error reading config.json: %w", err)
+		return SourdoughConfig{}, fmt.Errorf("error opening database: %w", err)
 	}
-	var cfg SourdoughConfig
-	if err := json.Unmarshal(file, &cfg); err != nil {
-		return SourdoughConfig{}, fmt.Errorf("error parsing config.json: %w", err)
+	defer db.Close()
+	rows, err := db.Query("SELECT name, url FROM starters")
+	if err != nil {
+		return SourdoughConfig{}, fmt.Errorf("error querying database: %w", err)
 	}
-	if len(cfg.Starters) < 1 {
-		return SourdoughConfig{}, errors.New("no starters found in config.json")
+	starters := map[string]string{}
+	for rows.Next() {
+		var name, url string
+		if err := rows.Scan(&name, &url); err != nil {
+			return SourdoughConfig{}, fmt.Errorf("error scanning database row: %w", err)
+		}
+		starters[name] = url
 	}
-	return cfg, err
+
+	if len(starters) < 1 {
+		return SourdoughConfig{}, errors.New("no starters found in database")
+	}
+
+	return SourdoughConfig{Starters: starters}, nil
 }
 
 func (cfg *config) createProjectConfig(name string) error {
@@ -253,5 +272,113 @@ func (cfg *config) createStarterConfig(name string, options map[string]string) e
 		return fmt.Errorf("error creating starter '%s': %w", cleaned, err)
 	}
 	cfg.starter = &starter
+	return nil
+}
+
+func addNewStarter() error {
+	var name, url, description string
+	if err := huh.NewForm(huh.NewGroup(
+		huh.NewInput().
+			Title("Name").
+			Description("Enter the name of the starter").
+			Value(&name).
+			Validate(huh.ValidateNotEmpty()),
+		huh.NewInput().
+			Title("URL").
+			Description("Enter the URL of the starter repository (include '.git')").
+			Value(&url).
+			Validate(func(s string) error {
+				if err := huh.ValidateNotEmpty()(s); err != nil {
+					return err
+				}
+				if !strings.HasPrefix(s, "https://") && !strings.HasPrefix(s, "git@") && !strings.HasPrefix(s, "http://") && !strings.HasPrefix(s, "/") {
+					return errors.New("URL must start with 'https://', 'git@', 'http://', or '/'")
+				}
+				if !strings.HasSuffix(s, ".git") {
+					return errors.New("URL must end with '.git'")
+				}
+				return nil
+			}),
+		huh.NewText().
+			Title("Description").
+			Description("Optional: Enter a description of the starter").
+			Value(&description),
+	)).Run(); err != nil {
+		return fmt.Errorf("error getting starter name and url: %w", err)
+	}
+	db, err := database()
+	if err != nil {
+		return fmt.Errorf("error opening database: %w", err)
+	}
+	defer db.Close()
+	_, err = db.Exec("INSERT INTO starters (name, url, description) VALUES (?, ?, ?)", name, url, description)
+	if err != nil {
+		return fmt.Errorf("error inserting starter into database: %w", err)
+	}
+	return nil
+}
+
+func removeStarter(name string) error {
+	name = strings.TrimSpace(name)
+	if name == "" {
+		return errors.New("name cannot be empty")
+	}
+	db, err := database()
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	_, err = db.Exec("DELETE FROM starters WHERE name = ?", name)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func exportStarters(sdConfig SourdoughConfig) error {
+	file, err := os.Create("sourdough.json")
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	enc := json.NewEncoder(file)
+	enc.SetIndent("", "  ")
+	if err := enc.Encode(sdConfig); err != nil {
+		return err
+	}
+	fmt.Println("Exported starters to sourdough.json")
+	return nil
+}
+
+func importStarters(path string) error {
+	path = strings.TrimSpace(path)
+	if path == "" {
+		return errors.New("path cannot be empty (i.e. ./sourdough.json)")
+	}
+	if !strings.HasSuffix(path, ".json") {
+		return errors.New("path must point to a JSON file (i.e. sourdough.json)")
+	}
+	file, err := os.Open(path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	var sdConfig SourdoughConfig
+	dec := json.NewDecoder(file)
+	if err := dec.Decode(&sdConfig); err != nil {
+		return err
+	}
+	db, err := database()
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	for name, url := range sdConfig.Starters {
+		_, err := db.Exec("INSERT INTO starters (name, url) VALUES (?, ?)", name, url)
+		if err != nil {
+			return err
+		}
+	}
+	fmt.Println("Imported starters from sourdough.json")
 	return nil
 }
