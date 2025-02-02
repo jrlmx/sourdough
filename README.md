@@ -171,7 +171,7 @@ A Svelte/Inertia starter is planned - with ShadCn-Svelte installed by default. B
 
 ## Road to somekind of stablilty...
 
-Automated Testing. Caching of starter files to improve performance. An cross platform installation script for Sourdough to streamline installation.
+Automated Testing. Caching of starter files to improve performance. A cross platform installation script for Sourdough to streamline installation.
 
 ## Other ideas and plans...
 
