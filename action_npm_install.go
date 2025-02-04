@@ -16,7 +16,7 @@ func npmInstallAction(cfg *config) error {
 	if err := runCommand("npm", append([]string{"install", "-D", "--no-package-lock"}, cfg.starter.npm.development...), QuietMode); err != nil {
 		return fmt.Errorf("error installing npm dev packages: %w", err)
 	}
-	if err := runCommand("npm", []string{"install"}, NormalMode); err != nil {
+	if err := runCommand("npm", []string{"install"}, InteractiveMode); err != nil {
 		return fmt.Errorf("error installing npm packages: %w", err)
 	}
 	return nil

@@ -25,7 +25,7 @@ func composerInstallAction(cfg *config) error {
 	if err := runCommand("composer", []string{"update", "-n", "--no-scripts"}, QuietMode); err != nil {
 		return fmt.Errorf("error updating composer packages: %w", err)
 	}
-	if err := runCommand("composer", []string{"install"}, NormalMode); err != nil {
+	if err := runCommand("composer", []string{"install"}, InteractiveMode); err != nil {
 		return fmt.Errorf("error installing composer packages: %w", err)
 	}
 	return nil
