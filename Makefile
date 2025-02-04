@@ -1,2 +1,5 @@
 install:
-	go build -o ~/.local/bin/sourdough && chmod +x ~/.local/bin/sourdough
+	go install .
+uninstall:
+	rm -f $(GOPATH)/bin/$(shell basename $(PWD))
+	test -d ~/.sourdough && rm -rf ~/.sourdough

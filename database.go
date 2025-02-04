@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/charmbracelet/huh"
 	_ "modernc.org/sqlite"
 )
 
@@ -50,6 +51,31 @@ func ensureStarterTableExists(db *sql.DB) error {
 	return nil
 }
 
+func ensureStartersTableIsNotEmpty(db *sql.DB) error {
+	var count int
+	var addDefaultStarters bool
+	row := db.QueryRow("SELECT COUNT(*) FROM starters")
+	if err := row.Scan(&count); err != nil {
+		return err
+	}
+	if count < 1 {
+		if err := huh.NewConfirm().
+			Title("Do you want to add the example starter?").
+			Value(&addDefaultStarters).
+			Run(); err != nil {
+			return err
+		}
+	}
+	if addDefaultStarters {
+		if _, err := db.Exec(`
+		INSERT INTO starters (name, url, description)
+		VALUES (?, ?, ?)`, "jrlmx/example-starter", "https://github.com/jrlmx/example-starter.git", "An example starter for Sourdough"); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func database() (*sql.DB, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
@@ -64,6 +90,9 @@ func database() (*sql.DB, error) {
 		return nil, err
 	}
 	if err := ensureStarterTableExists(db); err != nil {
+		return nil, err
+	}
+	if err := ensureStartersTableIsNotEmpty(db); err != nil {
 		return nil, err
 	}
 	return db, nil

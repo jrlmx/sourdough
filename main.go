@@ -177,11 +177,9 @@ func getSourdoughConfig() (SourdoughConfig, error) {
 		}
 		starters[name] = url
 	}
-
 	if len(starters) < 1 {
 		return SourdoughConfig{}, errors.New("no starters found in database")
 	}
-
 	return SourdoughConfig{Starters: starters}, nil
 }
 
