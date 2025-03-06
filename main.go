@@ -16,9 +16,9 @@ import (
 
 func getActions() []Action {
 	return []Action{
-		{name: "create_auth_json", hookable: false, callback: createAuthJsonAction},
 		{name: "create_project", hookable: false, callback: createProjectAction},
 		{name: "remove_files", hookable: false, callback: removeFilesAction},
+		{name: "create_auth_json", hookable: false, callback: createAuthJsonAction},
 		{name: "composer_install", hookable: true, callback: composerInstallAction},
 		{name: "npm_install", hookable: true, callback: npmInstallAction},
 		{name: "publish_files", hookable: true, callback: publishFilesAction},
