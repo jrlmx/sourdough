@@ -35,6 +35,7 @@ func newCommand(sd cli.SourdoughConfig) error {
 		return err
 	}
 	s, err := starter.NewStarter(
+		pname,
 		filepath.Join(sd.StarterPath(), sname),
 		filepath.Join(pwd, pname),
 	)

@@ -51,7 +51,7 @@ type StarterConfigJson struct {
 	Commands []string `json:"commands"`
 }
 
-func NewStarter(spath string, target string) (*StarterConfig, error) {
+func NewStarter(pname, spath, target string) (*StarterConfig, error) {
 	sjson, err := getStarterConfig(filepath.Join(spath, "starter.json"))
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func NewStarter(spath string, target string) (*StarterConfig, error) {
 		return nil, err
 	}
 
-	installCmd, err := NewCommand("laravel", append([]string{"new"}, sjson.Installer.Args...))
+	installCmd, err := NewCommand("laravel", append([]string{"new", pname}, sjson.Installer.Args...))
 	if err != nil {
 		return nil, err
 	}
