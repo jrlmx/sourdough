@@ -64,22 +64,22 @@ func RemoveFilesAction(sd *cli.SourdoughConfig, s *StarterConfig) error {
 func PHPDependenciesAction(sd *cli.SourdoughConfig, s *StarterConfig) error {
 	fmt.Println("php dependencies...")
 	if len(s.php.remove) > 0 {
-		cstring := "remove -n --no-update " + strings.Join(s.php.remove, " ")
-		if err := RunCommand(sd.Ctx, "composer", strings.Split(cstring, " ")); err != nil {
+		if err := RunCommand(sd.Ctx, "composer", append([]string{"remove", "-n", "--no-update"}, s.php.remove...)); err != nil {
 			return err
 		}
 	}
 	if len(s.php.development) > 0 {
-		cstring := "require -n --no-update --dev " + strings.Join(s.php.development, " ")
-		if err := RunCommand(sd.Ctx, "composer", strings.Split(cstring, " ")); err != nil {
+		if err := RunCommand(sd.Ctx, "composer", append([]string{"require", "-n", "--no-update", "--dev"}, s.php.development...)); err != nil {
 			return err
 		}
 	}
 	if len(s.php.production) > 0 {
-		cstring := "require -n --no-update " + strings.Join(s.php.production, " ")
-		if err := RunCommand(sd.Ctx, "composer", strings.Split(cstring, " ")); err != nil {
+		if err := RunCommand(sd.Ctx, "composer", append([]string{"require", "-n", "--no-update"}, s.php.production...)); err != nil {
 			return err
 		}
+	}
+	if err := RunCommand(sd.Ctx, "composer", []string{"update", "-n", "--no-scripts"}); err != nil {
+		return err
 	}
 	if err := RunCommand(sd.Ctx, "composer", []string{"install"}); err != nil {
 		return err
@@ -90,20 +90,17 @@ func PHPDependenciesAction(sd *cli.SourdoughConfig, s *StarterConfig) error {
 func JSDependenciesAction(sd *cli.SourdoughConfig, s *StarterConfig) error {
 	fmt.Println("js dependencies...")
 	if len(s.js.remove) > 0 {
-		cstring := "uninstall --no-package-lock " + strings.Join(s.js.remove, " ")
-		if err := RunCommand(sd.Ctx, "npm", strings.Split(cstring, " ")); err != nil {
+		if err := RunCommand(sd.Ctx, "npm", append([]string{"uninstall", "--no-package-lock"}, s.js.remove...)); err != nil {
 			return err
 		}
 	}
 	if len(s.js.development) > 0 {
-		cstring := "install --no-package-lock " + strings.Join(s.js.development, " ")
-		if err := RunCommand(sd.Ctx, "npm", strings.Split(cstring, " ")); err != nil {
+		if err := RunCommand(sd.Ctx, "npm", append([]string{"install", "--no-package-lock", "--save-dev"}, s.js.development...)); err != nil {
 			return err
 		}
 	}
 	if len(s.js.production) > 0 {
-		cstring := "install --no-package-lock --save-dev "
-		if err := RunCommand(sd.Ctx, "npm", strings.Split(cstring, " ")); err != nil {
+		if err := RunCommand(sd.Ctx, "npm", append([]string{"install", "--no-package-lock"}, s.js.production...)); err != nil {
 			return err
 		}
 	}
@@ -126,7 +123,7 @@ func CopyFilesAction(sd *cli.SourdoughConfig, s *StarterConfig) error {
 			return err
 		}
 		defer sfile.Close()
-		dfile, err := os.Open(dest)
+		dfile, err := os.Create(dest)
 		if err != nil {
 			return err
 		}
